@@ -2,8 +2,8 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-10 10:54:21
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-10 17:25:06
- * @FilePath: \RS_AS2\Tools\PID\StepSignal.h
+ * @LastEditTime: 2022-11-12 12:43:27
+ * @FilePath: \RS_AS2\Tools\PID_example\StepSignal.h
  * @Description:
  *  阶跃信号发生器，通过class实现。使用方法详见下一行（代码文本中）
  *  使用方法：
@@ -22,8 +22,8 @@ class StepSignal
 {
 public:
     int period = 0;              // 阶跃信号的周期，这个周期是单个高/低的长度，实际上数学定义层面的周期应该是2*period
-    int high = 0;                // 阶跃信号的“高”具体是多少
-    int value = 0;               // 阶跃信号的当前值, 用于输出，调用这个就可以得到函数当前的值，当然，在使用前要update()
+    double high = 0;                // 阶跃信号的“高”具体是多少
+    double value = 0.0;               // 阶跃信号的当前值, 用于输出，调用这个就可以得到函数当前的值，当然，在使用前要update()
     unsigned long prev_time = 0; // 上次更新函数值时的时间记录
 
     /**
@@ -38,9 +38,9 @@ public:
     /**
      * @description: 初始化函数，用户应当在这里做的是：初始化阶跃信号的周期，峰值大小。
      * @param {int} p :阶跃信号的周期。从低到高一整个算是一个周期,单个周期中一半是高，一半是低。
-     * @param {int} h :阶跃信号的“高”具体是多少。
+     * @param {double} h :阶跃信号的“高”具体是多少。
      */
-    void init(int p, int h)
+    void init(int p, double h)
     {
         period = p;
         high = h;
@@ -51,9 +51,9 @@ public:
     /**
      * @description: 用于重新设置阶跃函数的周期和值，只是为了函数名好记，实际上和init是同样的功能
      * @param {int} p :阶跃信号的周期。从低到高一整个算是一个周期,单个周期中一半是高，一半是低。
-     * @param {int} h :阶跃信号的“高”具体是多少。
+     * @param {double} h :阶跃信号的“高”具体是多少。
      */
-    void reset(int p, int h)
+    void reset(int p, double h)
     {
         period = p;
         high = h;
