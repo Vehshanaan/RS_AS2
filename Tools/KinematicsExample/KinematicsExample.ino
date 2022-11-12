@@ -2,7 +2,7 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-11 10:59:01
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-11 12:26:49
+ * @LastEditTime: 2022-11-12 16:03:15
  * @FilePath: \RS_AS2\Tools\KinematicsExample\KinematicsExample.ino
  * @Description: 
  * 
@@ -26,5 +26,4 @@ void loop()
 {
     ki.update();
     ki.print();
-    delay(100);
 }
