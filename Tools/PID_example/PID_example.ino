@@ -23,7 +23,6 @@ void setup()
     Serial.begin(9600);
     delay(1);
     Serial.print("***RESET***");
-    step.init(1000, 1);
     setupEncoder0();
     setupEncoder1();
     ki.init();
