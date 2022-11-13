@@ -2,7 +2,7 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-10 16:36:15
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-12 16:31:28
+ * @LastEditTime: 2022-11-13 22:27:56
  * @FilePath: \RS_AS2\Tools\PID_example\PID.h
  * @Description:PID类，使用方法如下：
  * 1.建立PID类的对象
@@ -124,14 +124,14 @@ public:
         double delta_e = e - prev_e;
         D = (delta_e / delta_time) * Kd;
 
-        // 积分限幅,现在暂未开启
-        /*
+        // 积分限幅
+        
         if (abs(I) > I_limit)
         { // 如果积分项超出限制范围，则清空积分历史值，并把本轮计算的I也赋为0
             I = 0;
             prev_I = 0;
         }
-        */
+        
 
         result = P + I + D;
 
