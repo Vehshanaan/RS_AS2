@@ -28,11 +28,11 @@ void setup()
     ki.init();
     motor.init();
 
-    double Kp = 90;// 18
-    double Ki = 0.70;//1.0;
-    double Kd = 0.10;
+    double Kp = 90;// 90
+    double Ki = 0.70;//0.7;
+    double Kd = 0.10;//0.1
     double I_limit = 500;
-    unsigned long PID_update_cycle_length = 100;
+    unsigned long PID_update_cycle_length = 0;
 
     pid_lspeed.init(Kp, Ki, Kd, I_limit, PID_update_cycle_length); // P,I,D,积分限幅值（暂时没用，只是占位符），PID更新时间间隔（单位毫秒），系统本身能做到的最快的速度也就是500微秒更新一次
     /*
@@ -57,6 +57,8 @@ void loop()
     //Serial.print("PID:");
     //Serial.println(pid_lspeed.result);
 
+    Serial.print("1:");
+    Serial.println(1);
     Serial.print("aim:");
     Serial.println(step.value);
     Serial.print("v_l:");
@@ -64,7 +66,6 @@ void loop()
     Serial.print("0:");
     Serial.println(0);
     
-
     
-    delay(17); // 17比1稳定
+    delay(40); // 17比1稳定
 }
