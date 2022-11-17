@@ -2,7 +2,7 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-17 19:20:51
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-17 19:53:41
+ * @LastEditTime: 2022-11-17 19:54:56
  * @FilePath: \RS_AS2\Experiments\TuningExercise\PID调试手册.md
  * @Description: 
  * 
@@ -40,4 +40,5 @@
       - `D`是代表阻止`被控量`曲线变化的参数，越大越会阻止`被控量`曲线的变化，比如：原本要从1-->1.5，加上了`D`，就会从1-->1.3
 
 ## 你学会了吗？比划比划吧：
-- PID调试练习：
+- PID调试练习：https://github.com/Vehshanaan/RS_AS2/tree/main/Experiments/TuningExercise
+- 有bug和不确定的地方随时联系我，没关系
