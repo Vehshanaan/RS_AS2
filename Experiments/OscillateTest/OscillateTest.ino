@@ -31,7 +31,7 @@ void setup() {
   // 对于300的delay，此三值分别为30 0.11 -950
   double Kp = 30;    
   double Ki = 0.11;   
-  double Kd = -950; // 0.018 
+  double Kd = -950;  
   double I_limit = 5000;
   unsigned long PID_update_cycle_length = 0;
 
@@ -46,7 +46,6 @@ void setup() {
 void loop() {
 
   ki.update();
-
   step.update();
 
   pid_lspeed.aim = step.value;           // 将阶跃信号的值设为速度控制PID的追踪对象
@@ -55,6 +54,7 @@ void loop() {
 
   if (step.value == 0) {
     pid_lspeed.reset();
+    motor.setPower(0, 0);
   }
 
   //Serial.print("PID:");
@@ -70,5 +70,10 @@ void loop() {
   Serial.println(0);
 
 
-  delay(300);  // 用300调的参数，300的表现是一个开头部分震荡有点多的pid表现
+  delay(300);  // 用300调的参数，300的表现是一个开头部分震荡有点多的pid表现，320也不错
+
+  // 1.可能是：pid wind up的问题：
+  // 建立设置PId参数的规则
+  // 保存现有的数据
+  // 给delay上一个范围，用范围的数
 }
