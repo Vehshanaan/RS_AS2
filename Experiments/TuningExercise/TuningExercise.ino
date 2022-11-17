@@ -2,7 +2,7 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-10 16:26:44
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-17 19:53:05
+ * @LastEditTime: 2022-11-17 19:57:44
  * @FilePath: \RS_AS2\Experiments\TuningExercise\TuningExercise.ino
  * @Description:用阶跃信号类作为电机驱动的给定值，然后用PID控制电机速度的例子
  * Copyright (c) 2022 by Runze Yuan 1959180242@qq.com, All Rights Reserved.
@@ -33,11 +33,13 @@ void setup()
   motor.init();
 
   // PID参数的调整：对于极低的延迟(delay<20)，此三值分别为90 0.7 0.1
-  // 对于300的delay，此三值分别为30 0.11 -950
+  // 对于300的delay，此三值分别为30 0.11 950
   // 调啊，调吧。
   // 这三个参数支持小数
   // 打开Arduino IDE的串口绘图仪来观察性能，我写了绘图的输出代码，绘图仪会自动绘图
-  double Kp = 0; 
+  // 注意：想不用串口绘图仪来调试PID几乎是不可能的
+  // 但用串口绘图仪调试会非常方便
+  double Kp = 35; // 不要动P，本次实验的确和P没有关系，P是35就行，不行告诉我一声，我统一改 
   double Ki = 0;
   double Kd = 0;
   delay_value = 300; // 在此处修改delay的时长,或者直接到loop()的最后一行来进行修改

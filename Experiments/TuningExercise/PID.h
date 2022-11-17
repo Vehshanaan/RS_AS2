@@ -2,8 +2,8 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-10 16:36:15
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-13 22:24:28
- * @FilePath: \RS_AS2\Experiments\OscillateExample\PID.h
+ * @LastEditTime: 2022-11-17 19:56:19
+ * @FilePath: \RS_AS2\Experiments\TuningExercise\PID.h
  * @Description:PID类，使用方法如下：
  * 1.建立PID类的对象
  * 2.使用PID.init()来给三个参数以及积分限幅上限赋值，以及给更新频率赋值
@@ -121,7 +121,7 @@ public:
     I = Ki * prev_I;
 
     // D计算
-    double delta_e = e - prev_e;
+    double delta_e = prev_e - e;
     D = (delta_e / delta_time) * Kd;
 
     // 积分限幅
