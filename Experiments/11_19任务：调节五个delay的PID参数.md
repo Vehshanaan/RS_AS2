@@ -1,8 +1,8 @@
 <!--
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-19 08:48:26
- * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-19 09:02:27
+ * @LastEditors: Zhinan Chen 1466684392@qq.com
+ * @LastEditTime: 2022-11-19 17:18
  * @FilePath: \RS_AS2\Experiments\11_19任务：调节五个delay的PID参数.md
  * @Description: 
  * 
@@ -12,13 +12,18 @@
 ## **小提示**，我更新了一点点那个TuningExercise，现在delay是精准的了，只是为了确保实验严谨。所以记得[更新](https://github.com/Vehshanaan/RS_AS2/tree/main/Experiments/TuningExercise)一下。更新前记得保留自己的历史记录，以防万一。
 ## 我想让频率`f` = 1/`delay` 等差取五个点，而不是让delay等差，这样比较*科学*一点吧，所以，
 ## 要用的[五个点](https://zh.planetcalc.com/9023/?xy=0%201000%0A4%202&interpolate=1%202%203)是：
-|f|delay|
-|:-:|:-:|
-|100Hz|10(millis)|
-|75.5Hz|13(millis)|
-|51Hz|20(millis)|
-|26.5Hz|38(millis)|
-|2Hz|500(millis)|
+|f|delay|P|I|D|
+|:-:|:-:|:-:|:-:|:-:|
+|100Hz|10(millis)|35|2.5|5|
+|75.5Hz|13(millis)|35|1.8|2.5|
+|51Hz|20(millis)|35|1.5|2|
+|26.5Hz|38(millis)|35|0.75|1|
+|2Hz|500(millis)|35|0.05|950|
+
+
+## 发现：
+1.对于38（milli)的delay,（五个点后在一定时间内稳定在5%内，但最后出现了较大波动）
+2.对于延迟低于20(millis)的五个点后虽然趋于稳定但波动较大
 
 ## 针对上述五个delay的值，把pid参数调到[我们所需要的状态](https://github.com/Vehshanaan/RS_AS2/blob/main/Experiments/TuningExercise/PID%E8%B0%83%E8%AF%95%E6%89%8B%E5%86%8C.md),然后记录PID的值。
 
