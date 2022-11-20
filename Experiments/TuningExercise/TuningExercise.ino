@@ -41,8 +41,8 @@ void setup()
   // 注意：想不用串口绘图仪来调试PID几乎是不可能的
   // 但用串口绘图仪调试会非常方便
   double Kp = 35; // 不要动P，本次实验的确和P没有关系，P是35就行，不行告诉我一声，我统一改
-  double Ki = 0;
-  double Kd = 0;
+  double Ki = 0.05;
+  double Kd = 1000;
   delay_value = 300; // 在此处修改delay的时长,或者直接到loop()的最后一行来进行修改
   // 如果嫌两次电机旋转之间的间隔太长：改下面这个init的第一个参数，这两个参数第一个是周期，第二个是阶跃函数的高值具体是多少，第二个不要改
   step.init(5000, 1.0);
@@ -59,10 +59,11 @@ void loop()
   {
     prev_millis = millis();
   }
-  ki.update();
-  step.update();
+
   if ((millis() - prev_millis) >= delay_value)
-  {
+  {  
+    ki.update();
+    step.update();
     // 进行pid相关的操作
     if (step.value == step.high) // 阶跃函数为高时，用pid控制电机速度，开评估器，评估pid性能
     {
@@ -86,10 +87,10 @@ void loop()
     Serial.println(ki.v_l);
     Serial.print("0:");
     Serial.println(0);
-    // Serial.print("sigma:");
-    // Serial.println(eva.overshoot);
-    // Serial.print("ts:");
-    // Serial.println(eva.setting);
+    Serial.print("sigma:");
+    Serial.println(eva.overshoot);
+    Serial.print("ts:");
+    Serial.println(eva.setting);
 
     // 更新时间记录
     prev_millis = millis();

@@ -37,9 +37,9 @@ void setup()
   // 对于300的delay，此三值分别为30 0.11 -950 或:35 0.1 950
   // 对于500的delay，此三值分别为35 0.15 500
   double Kp = 35;
-  double Ki = 0.1;
-  double Kd = 950;
-  delay_value = 300;
+  double Ki = 2.5;
+  double Kd = 5;
+  delay_value = 10;
   step.init(5000, 1.0);
 
   unsigned long PID_update_cycle_length = 0;
@@ -49,15 +49,15 @@ void setup()
 
 void loop()
 {
-
   if (prev_millis == 0)
   {
     prev_millis = millis();
   }
-  ki.update();
-  step.update();
+
   if ((millis() - prev_millis) >= delay_value)
-  {
+  {  
+    ki.update();
+    step.update();
     // 进行pid相关的操作
     if (step.value == step.high) // 阶跃函数为高时，用pid控制电机速度，开评估器，评估pid性能
     {
@@ -73,6 +73,8 @@ void loop()
       eva.reset();
     }
 
+    Serial.print("p:");
+    Serial.println(pid_lspeed.P);
     Serial.print("1:");
     Serial.println(1);
     Serial.print("aim:");
@@ -85,7 +87,6 @@ void loop()
     // Serial.println(eva.overshoot);
     // Serial.print("ts:");
     // Serial.println(eva.setting);
-
     // 更新时间记录
     prev_millis = millis();
   }
