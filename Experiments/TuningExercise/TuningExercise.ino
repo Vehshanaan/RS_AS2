@@ -21,7 +21,7 @@ StepSignal step;
 Evaluator eva;
 
 volatile int delay_value = 300;
-volatile unsigned long prev_millis = 0;
+volatile unsigned long prev_micros = 0;
 
 void setup()
 {
@@ -55,12 +55,12 @@ void setup()
 
 void loop()
 {
-  if (prev_millis == 0)
+  if (prev_micros == 0)
   {
-    prev_millis = millis();
+    prev_micros = millis();
   }
 
-  if ((millis() - prev_millis) >= delay_value)
+  if ((millis() - prev_micros) >= delay_value)
   {  
     ki.update();
     step.update();
@@ -93,7 +93,7 @@ void loop()
     Serial.println(eva.setting);
 
     // 更新时间记录
-    prev_millis = millis();
+    prev_micros = millis();
   }
   else
   {
