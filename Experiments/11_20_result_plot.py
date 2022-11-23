@@ -2,7 +2,7 @@
 Author: Runze Yuan 1959180242@qq.com
 Date: 2022-11-21 08:34:48
 LastEditors: Runze Yuan 1959180242@qq.com
-LastEditTime: 2022-11-22 10:48:17
+LastEditTime: 2022-11-22 13:19:50
 FilePath: \RS_AS2\Experiments\11_20_result_plot.py
 Description: 
 
@@ -251,6 +251,8 @@ for r in range(5):
     plt.plot(fs[r],avg_settings[r],marker = "o")
     plt.axvline(tuned_frequency[r],0,1,color = "r")
     plt.ylabel("setting(ms)")
+    plt.ylim((0,300))
+    plt.xlim((30,70))
     plt.xlabel("frequency")
 
     plt.subplot(5,3,r*3+3)
