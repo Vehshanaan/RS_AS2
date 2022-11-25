@@ -2,13 +2,14 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-23 15:11:26
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-23 22:41:32
+ * @LastEditTime: 2022-11-25 21:03:41
  * @FilePath: \RS_AS2\Experiments\Week9Experiments\AutoTest\AutoTest.ino
  * @Description:
  *
  * Copyright (c) 2022 by Runze Yuan 1959180242@qq.com, All Rights Reserved.
  */
 #include "Interpolate.h"
+#include "PIDAutoEvaluate.h"
 
 void setup()
 {
@@ -115,15 +116,39 @@ void loop()
     // 上述两个list最后要append到总表里
     for (int _ = 0; _ < neighbour_points; _++)
     {
-        // 对于每一个邻域中的f_offset点，进行测试, 测试十次求setting和overshoot的均值，然后append给f_ftest_test_oveshoot/setting
-
+        // 对于每一个邻域中的f_offset点，进行测试, 测试十次求setting和overshoot的均值，然后append给上面的f_ftest_test_oveshoot/setting
+        double performances[2]; // 0:overshoot,1:setting
         // 前面已经算过各个offset点对应的delay，就直接调取对应delay就行
         double delay_current = delays[_];
         // 取本f_test对应的PID
-        // 对于当前的delay，PID，进行十次测试，记录平均值
+        // 对于当前的delay，PID，进行十次测试，记录平均值,保存到overshoot/setting_current_delay
+
+        /*PID评估器here
+        输入：当前频率对应的delay，pid参数，两个double（用来返回性能参数）
+        返回：无，直接操作输入的两个性能参数
+        */
+        int step_duration;
+        if((100*delay_current)>30000) // arduino的int是16位，最大三万多，这个是防溢出
+        {
+          step_duration = 30000;
+        }
+        else{
+          step_duration=50*delay_current;
+        }
+        PIDEvaluate(delay_current,35,2.5,5.0,10,performances,step_duration);
+
         // 把结果append给fftest_test_overshoot/setting
-        // 所以这里应该有一个高级的PID评估器，给定delay和PID参数，就能返回十次平均的overshoot和setting
-        
+        Serial.print("f");
+        Serial.print((int)f_test[i]);
+        Serial.print("_test_overshoot.append(");
+        Serial.print(performances[0]);
+        Serial.println(")");
+        Serial.print("f");
+        Serial.print((int)f_test[i]);
+        Serial.print("_test_setting.append(");
+        Serial.print(performances[1]);
+        Serial.println(")");
+        // 所以这里应该有一个高级的PID评估器，给定delay和PID参数，就能返回十次平均的overshoot和setting    
     }
     Serial.print("overshoot_results.append(");
     Serial.print("f");
