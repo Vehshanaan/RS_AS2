@@ -16,6 +16,8 @@
 
 ### 调整PID使其[稳定](https://github.com/Vehshanaan/RS_AS2/blob/main/Experiments/TuningExercise/PID%E8%B0%83%E8%AF%95%E6%89%8B%E5%86%8C.md)，记录参数结果
 
+- PID参数感觉还是有点规律的，调的时候应该不会碰到大问题，有问题喊我
+
 - 使用[此程序](https://github.com/Vehshanaan/RS_AS2/tree/main/Experiments/TuningExercise)进行结果的可视化以及参数的调试
 
 |f|对应delay|P|I|D|
