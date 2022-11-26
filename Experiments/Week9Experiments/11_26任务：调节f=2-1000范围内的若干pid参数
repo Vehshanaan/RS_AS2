@@ -1,0 +1,23 @@
+<!--
+ * @Author: Runze Yuan 1959180242@qq.com
+ * @Date: 2022-11-26 15:26:32
+ * @LastEditors: Runze Yuan 1959180242@qq.com
+ * @LastEditTime: 2022-11-26 15:32:14
+ * @FilePath: \RS_AS2\Experiments\Week9Experiments\11_26任务：调节f=2-1000范围内的若干pid参数
+ * @Description: 
+ * 
+ * Copyright (c) 2022 by Runze Yuan 1959180242@qq.com, All Rights Reserved. 
+-->
+## 针对反馈中提到的要更多测试点的问题，在f=2~1000的1范围内中取更多点
+
+### [插值结果](https://zh.planetcalc.com/9023/?xy=1%202%0A15%201000&interpolate=2%203%204%205%206%207%208%209%2010%2011%2012%2013%2014)（15个点）
+
+### 针对每个f，计算其delay = 1000/f
+
+### 调整PID使其[稳定](https://github.com/Vehshanaan/RS_AS2/blob/main/Experiments/TuningExercise/PID%E8%B0%83%E8%AF%95%E6%89%8B%E5%86%8C.md)，记录参数结果
+
+- 使用[此程序](https://github.com/Vehshanaan/RS_AS2/tree/main/Experiments/TuningExercise)进行结果的可视化以及参数的调试
+
+|f|对应delay|P|I|D|
+|:-:|:-:|:-:|:-:|:-:|
+||||||
