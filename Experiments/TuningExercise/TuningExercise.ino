@@ -2,7 +2,7 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-10 16:26:44
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-18 21:06:47
+ * @LastEditTime: 2022-11-26 15:30:56
  * @FilePath: \RS_AS2\Experiments\TuningExercise\TuningExercise.ino
  * @Description:用阶跃信号类作为电机驱动的给定值，然后用PID控制电机速度的例子
  * Copyright (c) 2022 by Runze Yuan 1959180242@qq.com, All Rights Reserved.
@@ -57,10 +57,10 @@ void loop()
 {
   if (prev_micros == 0)
   {
-    prev_micros = millis();
+    prev_micros = micros();
   }
 
-  if ((millis() - prev_micros) >= delay_value)
+  if ((micros() - prev_micros) >= delay_value*1000.0)
   {  
     ki.update();
     step.update();
@@ -87,13 +87,13 @@ void loop()
     Serial.println(ki.v_l);
     Serial.print("0:");
     Serial.println(0);
-    Serial.print("sigma:");
-    Serial.println(eva.overshoot);
-    Serial.print("ts:");
-    Serial.println(eva.setting);
+    //Serial.print("sigma:");
+    //Serial.println(eva.overshoot);
+    //Serial.print("ts:");
+    //Serial.println(eva.setting);
 
     // 更新时间记录
-    prev_micros = millis();
+    prev_micros = micros();
   }
   else
   {
