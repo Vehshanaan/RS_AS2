@@ -84,9 +84,15 @@ void PIDEvaluate(double delay, double Kp, double Ki, double Kd, int times, doubl
                   // 阶跃函数跳变为低的第一次，会进入到这里
                   if(eva.ended==false){ // 如果跳低了还没收敛：
                     // 结束评估，返回代表震荡的值
-                    parameters[0]=OSCILLATE;
+                    if(count==-1)
+                    {
+                      count+=1;
+                    }
+                    else{
+                    parameters[0]=OSCILLATE; 
                     parameters[1]=OSCILLATE;
                     return;
+                    }
                   }
                 }
                 eva.reset();

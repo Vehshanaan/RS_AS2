@@ -2,8 +2,8 @@
  * @Author: Runze Yuan 1959180242@qq.com
  * @Date: 2022-11-24 13:23:03
  * @LastEditors: Runze Yuan 1959180242@qq.com
- * @LastEditTime: 2022-11-25 09:34:34
- * @FilePath: \RS_AS2\Experiments\Week9Experiments\PID_AutoTest\PIDAutoEvaluate.h
+ * @LastEditTime: 2022-11-28 14:36:03
+ * @FilePath: \RS_AS2\Experiments\Week9Experiments\AutoTest\PIDAutoEvaluate.h
  * @Description:
  *
  * Copyright (c) 2022 by Runze Yuan 1959180242@qq.com, All Rights Reserved.
@@ -84,9 +84,14 @@ void PIDEvaluate(double delay, double Kp, double Ki, double Kd, int times, doubl
                   // 阶跃函数跳变为低的第一次，会进入到这里
                   if(eva.ended==false){ // 如果跳低了还没收敛：
                     // 结束评估，返回代表震荡的值
+                    if(count==-1){ // 允许count=-1的那一次震荡，那个不准
+                      count+=1;
+                    }
+                    else{ 
                     parameters[0]=OSCILLATE;
                     parameters[1]=OSCILLATE;
                     return;
+                    }
                   }
                 }
                 eva.reset();
