@@ -443,7 +443,7 @@ for i in range(len(f_test)):
     plt.plot(current_offset[overshoot_mask],
              current_overshoot[overshoot_mask], marker="o", label=str(f_test[i]))
     # 无效数据：
-    plt.plot(current_offset[np.invert(overshoot_mask)], np.zeros(
+    plt.scatter(current_offset[np.invert(overshoot_mask)], np.zeros(
         len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
     plt.ylabel("Overshoot (%)")
     plt.xlabel("PID Frequency (Hz)")
@@ -455,7 +455,7 @@ for i in range(len(f_test)):
     plt.plot(current_offset[setting_mask],
              current_setting[setting_mask], marker="o", label=str(f_test[i]))
     # 无效数据：
-    plt.plot(current_offset[np.invert(setting_mask)], np.zeros(
+    plt.scatter(current_offset[np.invert(setting_mask)], np.zeros(
         len(current_offset))[np.invert(setting_mask)], marker="*", color="r")
     plt.ylabel("Setting time (ms)")
     plt.xlabel("PID Frequency (Hz)")
