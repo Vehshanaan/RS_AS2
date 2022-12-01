@@ -62,7 +62,26 @@ We investigate this hypothesis through a structured experiment on the Pololu 3Pi
 % 如果你使用了一个已经被广泛理解的算法或技术，你可以只参考一个外部来源而不详细解释，除非解释算法/技术为读者提供了关于你的项目的重要信息。 
 % 你可能希望在这里介绍技术信息，以支持对特定组件的理解（例如，一个传感器或执行器的响应图，或者如果你在实验前有一个早期的可行性研究）。
 % 如果你要将你的机器人系统与自己进行比较，那么你可能需要记录你的 "基础"解决方案和你的 "改进版"解决方案。  
-In this section you should describe the specifics for your implementation such that your reader could recreate your work.  If you have used a well understood algorithm or technology you can reference an external source, unless explaining the algorithm/technology provides vital information for the reader regarding your project.  You may wish to present technical information here to support understanding of a specific component (e.g. a graph of a response of a sensor or actuator, or if you have an early feasibility study before your experiment).  If you are going to compare your robotic system against itself then you may need to document your ``baseline" solution and your ``improved" solution.  
+In this paper we have measured the performance of the PID controller with the Pololu 3pi+ 32U4 robot. We implemented the robot's wheel motor control, wheel speed measurement and PID control of the wheel speed in software.
+% 本文中，对PID控制器的性能是在Pololu 3pi+ 32U4 Robot身上展开的。我们用软件实现了机器人的轮子电机控制，速度追踪，以及对轮子速度的PID控制。
+
+% 插入系统框图
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.6\linewidth]{Report/Pic/ImplementFLowChart.png}}
+\caption{System Components.}
+\label{fig1}
+\end{figure}
+
+% 系统主要有5个组成部分：PID控制器，Motor Driver，Wheel，Encoder， Kinematics
+System has 5 main components: PID controller, Motor Driver, Wheel, Encoder, Kinematics.
+\begin{itemize}
+    \item\textbf{PID Controller}
+        % 最基础的PID控制器，
+    \item\textbf{Motor Driver}
+    \item\textbf{Wheel}
+    \item\textbf{Encoder}
+    \item\textbf{Kinematics}
+\end{itemize}
 
 
 \begin{algorithm}
