@@ -261,7 +261,7 @@ import matplotlib.pyplot as plt
 fig = plt.figure
 plt.plot(range(256),speed)
 plt.xlim = ([-5,230])
-plt.xlabel("PWM duty cycle ratio (0~255 for 0%~100%)")
-plt.ylabel("Left wheel speed calculated by kinematics (m/s)")
+plt.xlabel("PWM duty cycle ratio (0~255 for 0%~100%)",fontsize = 13)
+plt.ylabel("Left wheel speed calculated by kinematics (m/s)",fontsize=13)
 plt.grid()
 plt.show()
