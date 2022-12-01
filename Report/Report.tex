@@ -73,14 +73,26 @@ In this paper we have measured the performance of the PID controller with the Po
 \end{figure}
 
 % 系统主要有5个组成部分：PID控制器，Motor Driver，Wheel，Encoder， Kinematics
-System has 5 main components: PID controller, Motor Driver, Wheel, Encoder, Kinematics.
+System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kinematics.
 \begin{itemize}
-    \item\textbf{PID Controller}
-        % 最基础的PID控制器，
-    \item\textbf{Motor Driver}
-    \item\textbf{Wheel}
-    \item\textbf{Encoder}
-    \item\textbf{Kinematics}
+    \item\textbf{PID Controller: }We use basic PID controller in our system to minimize the number of irrelevant variables. We don't want common improvements for PID to be variables in the system, like integration limitation, etc. The PID controller we use can be described as below:
+    
+    
+        \begin{equation}\label{PID_1}
+            e(t) = r(t) - y(t)      
+        \end{equation}
+        $r(t)$: set point value, or say the aim of the system\\
+        $y(t)$: system output \\
+        $e(t)$: error
+        \begin{equation}\label{PID_2}
+            u(t)=K_{p}*e(t)+K_{i} * \sum_{i=1}^{k}  (e(t_{i})\Delta t)+K_{d} * \frac{de(t)}{dt}
+        \end{equation}
+        $u(t)$:PID controller output
+        \par
+    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0~255(integer) as input and output 0~5V power to the motor.
+    %插入电机速度与输入的特性图 
+    \item\textbf{Encoder: }On each wheel shaft we have a incremental encoder, with that we could measure wheel movements. Encoder counts between 358~359 for a 360° wheel spin
+    \item\textbf{Kinematics: }
 \end{itemize}
 
 
