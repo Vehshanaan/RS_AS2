@@ -73,9 +73,9 @@ In this paper we have measured the performance of the PID controller with the Po
 \end{figure}
 
 % 系统主要有5个组成部分：PID控制器，Motor Driver，Wheel，Encoder， Kinematics
-System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kinematics.
+System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kinematics. They are structured as shown in Fig. \ref{fig1}. 
 \begin{itemize}
-    \item\textbf{PID Controller: }We use basic PID controller in our system to minimize the number of irrelevant variables. We don't want common improvements for PID to be variables in the system, like integration limitation, etc. The PID controller we use can be described as below:
+    \item\textbf{PID Controller: } We use a basic PID controller in our system to minimise the number of irrelevant variables. We do not want popular improvements to the PID to become variables in the system, such as integral limitation. The PID controller we use can be described as below:
     
     
         \begin{equation}\label{PID_1}
@@ -89,10 +89,13 @@ System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kine
         \end{equation}
         $u(t)$:PID controller output
         \par
-    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0~255(integer) as input and output 0~5V power to the motor.
-    %插入电机速度与输入的特性图 
-    \item\textbf{Encoder: }On each wheel shaft we have a incremental encoder, with that we could measure wheel movements. Encoder counts between 358~359 for a 360° wheel spin
-    \item\textbf{Kinematics: }
+    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to the motor.
+    %插入电机速度与输入的特性图 %
+    % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
+    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. It also means that there is some error in the velocity calculations (it is difficult to measure the exact code count of one lap), but the velocity error has no effect on the experiments in this paper.
+    % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
+    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the encoder value with the circumference of the wheel in order to calculate the robot kinematics. in this paper only the wheel speed part of the kinematics is needed.
+
 \end{itemize}
 
 
@@ -109,14 +112,6 @@ System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kine
 		\EndFor
 	\end{algorithmic} 
 \end{algorithm}
-
-% 你要是能在这块放一个伪代码流程，效果会比较不错,你可能还可以在这里放一点等式
-It can be a good idea to include pseudo code (see Algorithm \ref{pseudo:ppo} above), and you may also want to include equations such as eq.\ref{eq:emc2} below:
-
-% 公式
-\begin{equation}\label{eq:emc2}
-E=mc^2
-\end{equation}
 
 \section{Experiment Methodology}
 % 3.
@@ -172,12 +167,6 @@ You should use subsections where they aid in clarity.  For instance, it may be u
 
 When presenting results, aim for a presentation which clearly communicates an insight. For example, a large table of all the individual data requires the reader to do a lot of work to find out what is important.  In contrast, a table which appropriately presents the mean and standard deviation has summarised the results for the reader (and would be more useful).  Similarly, aim to combine data onto a chart when possible so that a direct comparison can be made - and when possible, include error bars.  
 
-% 使用图片的语法的例子：
-\begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
-\caption{Example of a figure caption.  This dot may or may not be circular.}
-\label{fig1}
-\end{figure}
 
 % 记住标明所有的轴线，给所有的图表、数字和表格加上标题，并在报告文本中引用这些内容（例如，见图ref{fig1}）
 % --永远不要要求读者必须自己得出结论或理解，解释他们正在看什么。  
