@@ -73,7 +73,7 @@ In this paper we have measured the performance of the PID controller with the Po
 \end{figure}
 
 % 系统主要有5个组成部分：PID控制器，Motor Driver，Wheel，Encoder， Kinematics
-System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kinematics. They are structured as shown in Fig. \ref{fig1}. 
+System has \textbf{4 main components: PID controller, wheel and motor driver, encoder, kinematics.} They are structured as shown in Fig. \ref{fig1}. 
 \begin{itemize}
     \item\textbf{PID Controller: } We use a basic PID controller in our system to minimise the number of irrelevant variables. We do not want popular improvements to the PID to become variables in the system, such as integral limitation. The PID controller we use can be described as below:
     
@@ -89,48 +89,55 @@ System has 4 main components: PID controller, Motor Driver, Wheel, Encoder, Kine
         \end{equation}
         $u(t)$:PID controller output
         \par
-    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to the motor.
+    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to drive the wheels.
     %插入电机速度与输入的特性图 %
     % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
     \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. It also means that there is some error in the velocity calculations (it is difficult to measure the exact code count of one lap), but the velocity error has no effect on the experiments in this paper.
     % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
-    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the encoder value with the circumference of the wheel in order to calculate the robot kinematics. in this paper only the wheel speed part of the kinematics is needed.
+    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the encoder value with the circumference of the wheel in order to calculate the robot kinematics. In this paper only the wheel speed part of the kinematics is needed.
 
 \end{itemize}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width = 300]{Report/Pic/WheelResponse.png}}
-\caption{System Components.}
-\label{fig1}
+\centerline{\includegraphics[width = \linewidth]{Report/Pic/WheelResponse.png}}
+\caption{Diagram of wheel speed versus PWM value. Non-linear characteristics in the test range (speed around 1)} % 轮子速度与PWM值的关系
+\label{fig2}
 \end{figure}
 
 
-\begin{algorithm}
-	\caption{Pseudo Codes}\label{pseudo:ppo}
-	\begin{algorithmic}[1]
-		\For {$iteration=1,2,\ldots$}
-			\For {$actor=1,2,\ldots,N$}
-				\State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
-				\State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
-			\EndFor
-			\State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and mini-batch size $M\leq NT$
-			\State $\theta_{old}\leftarrow\theta$
-		\EndFor
-	\end{algorithmic} 
-\end{algorithm}
 
 \section{Experiment Methodology}
 % 3.
 % 在这一节中，记录你是如何组织（设计）你的实验的，从而使其他人可以很容易地重新创造你的工作。  
 % 你也希望你的读者同意你仔细考虑了你的实验，这样我们就可以相信你的结果是有意义的，而且是可信的（没有错误）。 
 % 你在这一节中使用哪些小节（如果有的话），主要取决于你的项目和你选择的展示方式。  以下是一些建议，以帮助你的工作清晰化。
-In this section, document how you structured (designed) your experiment such that someone else could easily recreate your work.  You also want your reader to agree that you carefully considered your experiment so that we could trust your results to be both \emph{insightful} (mean something) and \emph{credible} (not subject to error).  Which subsections (if any) that you use in this section will largely depend on your project and how you choose to present it.  The following are suggestions to aid the clarity of your work.
+
+To test our hypothesis, we investigated the effect of PID update frequency on the performance of the PID controller.
+
+% 
 
 \subsection{Overview of Method}
 % 3.A
 % 向读者描述你的实验的一般结构和程序。你应该提供一个有点像蛋糕食谱的规格。 
 % 例如：你的实验持续多长时间？ 你使用多少次重复试验？有多少种备用方案？
-Describe to the reader the general structure and procedure of your experiment. You should provide a specification a bit like a cake recipe.  For example: how long does your experiment last?  how many repeated trials do you use?  how many alternate scenarios are there?
+The main focus of the experiment was to keep the PID parameters constant and change the update frequency of the PID controller to observe the change in performance metrics (overshoot, setting time). A frequency range of \textbf{2Hz $\sim$ 500Hz} was selected for testing based on the actual control requirements and hardware performance limitations (outside of this range the controller output can oscillate violently). Using the same set of PID parameters for the entire frequency range would produce oscillations at most of the tested frequencies and produce meaningless test data, so we adopted the following approach.
+% 实验的主要内容就是保持PID参数不变，改变PID控制器的update freqeucy， 观察性能指标（overshoot, setting time）的变化。根据实际控制的需求和硬件性能的限制，我们选定2Hz~500Hz的频率范围来进行测试（在此范围外控制器输出会产生剧烈震荡）。对整个频率范围使用同一组PID参数会使大部分受试频率产生震荡，产生无意义的测试数据，因此我们采用这样的方法：
+
+
+
+%\begin{algorithm}
+%	\caption{Pseudo Codes}\label{pseudo:ppo}
+%	\begin{algorithmic}[1]
+%		\For {$iteration=1,2,\ldots$}
+%			\For {$actor=1,2,\ldots,N$}
+%				\State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
+%				\State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
+%			\EndFor
+%			\State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and mini-batch size $M\leq NT$
+%			\State $\theta_{old}\leftarrow\theta$
+%		\EndFor
+%	\end{algorithmic} 
+%\end{algorithm}
 
 \subsection{Discussion of Variables}
 % 3.B
