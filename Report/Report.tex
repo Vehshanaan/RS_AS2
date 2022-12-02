@@ -139,26 +139,34 @@ We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[
 \end{enumerate}
 
 %接下来解释算法
+% 对于f1-15中的每一个频率，我们都在其邻域中测试此频率所对应的PID参数的性能。取当前频率的前一个与后一个频率作为邻域的上下限（若没有前一个或后一个，则用自己代替）。在邻域中取十个等间距点，测试PID控制器的性能。
+
+For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood,with the PID parameter corresponding to $f_{i}$. The previous and next frequencies to the current frequency are taken as the upper and lower limits of the neighbourhood (if there is no previous or next, use $f_{i}$ instead). 10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller.
 
 \begin{algorithm}
 	\caption{Test Process}\label{TestMethod}
 	\begin{algorithmic}[1]
-        \State Find 15  
-	\For {$iteration=1,2,\ldots$}
-			\For {$actor=1,2,\ldots,N$}
-				\State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
-				\State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
+        \State Calculate 15  equidistant frequencies $f_{1}\sim f_{15}$ in range of $[2,500]$
+	\For {$f_{i}=f_{1},f_{2},\ldots,f_{15},$} 
+                \State Tune PID parameters $K_{i}$, $K_{d}$
+                \State Calculate 10 equidistant frequencies $f_{n1}\sim f_{n10}$ in range of $f_{i}$'s neighbourhood $[f_{i-1},f_{i+1}]$
+                \State In 4: if $i-1<0$ or $i+1>15$, use $f_{i}$ instead
+			\For {$f_{n}= f_{n1},f_{n2},\ldots,f_{n10}$}
+				\State Use step signal as left wheel speed set point.
+                \State Measure PID performance with step response.
+                \State Calculate the mean overshoot and setting time of 10 responses.
 			\EndFor
-			\State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and mini-batch size $M\leq NT$
-			\State $\theta_{old}\leftarrow\theta$
 		\EndFor
 	\end{algorithmic} 
 \end{algorithm}
 
+% 我们使用邻域来进行测试，是为了在保证PID控制器稳定（来获得有意义的结果）的同时，展示不同频段上频率变化对PID控制器性能的影响。
+We use the neighbourhood to perform the test in order to demonstrate the effect of frequency variations on the performance of the PID controller over different frequency ranges while ensuring that the PID controller is stable (to obtain meaningful results).
+
 \subsection{Discussion of Variables}
 % 3.B
 % 你应该概述一下你的实验中的关键变量。这将有助于你的读者以后相信你的结果是可信的，而不会读不懂。
-You should outline the key variables within your experiment. This will help your reader to later believe your results are credible and not confused.
+Variables in this paper are: $K_{i}$, $K_{d}$, PID update frequency $f$, left wheel speed set point $v$, 
 \begin{itemize}
     % 变量表
     % 受控变量：这些是你的实验（任务、硬件、软件、环境）的部分，这些部分可能会有变化，但你通过仔细设计实验来控制它们。例如，电池寿命不同，所以你将使用新电池。
