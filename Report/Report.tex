@@ -19,6 +19,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{bm}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125em}}
 \begin{document}
@@ -69,11 +70,11 @@ In this paper we have measured the performance of the PID controller with the Po
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=0.6\linewidth]{Report/Pic/ImplementFLowChart.png}}
 \caption{System Components.}
-\label{fig1}
+\label{fig_ImplementFlowChart}
 \end{figure}
 
 % 系统主要有5个组成部分：PID控制器，Motor Driver，Wheel，Encoder， Kinematics
-System has \textbf{4 main components: PID controller, wheel and motor driver, encoder, kinematics.} They are structured as shown in Fig. \ref{fig1}. 
+System has \textbf{4 main components: PID controller, wheel and motor driver, encoder, kinematics.} They are structured as shown in Fig. \ref{fig_ImplementFlowChart}. 
 \begin{itemize}
     \item\textbf{PID Controller: } We use a basic PID controller in our system to minimise the number of irrelevant variables. We do not want popular improvements to the PID to become variables in the system, such as integral limitation. The PID controller we use can be described as below:
     
@@ -101,7 +102,7 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
 \begin{figure}[htbp]
 \centerline{\includegraphics[width = \linewidth]{Report/Pic/WheelResponse.png}}
 \caption{Diagram of wheel speed versus PWM value. Non-linear characteristics in the test range (speed around 1)} % 轮子速度与PWM值的关系
-\label{fig2}
+\label{fig_WheelCharacter}
 \end{figure}
 
 
@@ -120,24 +121,39 @@ To test our hypothesis, we investigated the effect of PID update frequency on th
 % 3.A
 % 向读者描述你的实验的一般结构和程序。你应该提供一个有点像蛋糕食谱的规格。 
 % 例如：你的实验持续多长时间？ 你使用多少次重复试验？有多少种备用方案？
-The main focus of the experiment was to keep the PID parameters constant and change the update frequency of the PID controller to observe the change in performance metrics (overshoot, setting time). A frequency range of \textbf{2Hz $\sim$ 500Hz} was selected for testing based on the actual control requirements and hardware performance limitations (outside of this range the controller output can oscillate violently). Using the same set of PID parameters for the entire frequency range would produce oscillations at most of the tested frequencies and produce meaningless test data, so we adopted the following approach.
+The main focus of the experiment was to \textbf{keep the PID parameters constant and change the update frequency of the PID controller to observe the change in performance metrics} (overshoot, setting time). A frequency range of \textbf{2Hz $\sim$ 500Hz} was selected for testing based on the actual control requirements and hardware performance limitations (outside of this range the controller output can oscillate violently). Using the same set of PID parameters for the entire frequency range would produce oscillations at most of the tested frequencies and produce meaningless test data, so we adopted the following approach: 
 % 实验的主要内容就是保持PID参数不变，改变PID控制器的update freqeucy， 观察性能指标（overshoot, setting time）的变化。根据实际控制的需求和硬件性能的限制，我们选定2Hz~500Hz的频率范围来进行测试（在此范围外控制器输出会产生剧烈震荡）。对整个频率范围使用同一组PID参数会使大部分受试频率产生震荡，产生无意义的测试数据，因此我们采用这样的方法：
 
+% 插入系统框图
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{Report/Pic/FrequencyRangeExplained.png}}
+\caption{Method of iterating through the frequency range.}% 遍历频率域的方法
+\label{fig_FrequencyRange}
+\end{figure}
 
+We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[2,500]$,  and \textbf{for each frequency we tune a set of PID parameters. Parameter tuning follows a common principle:}
+\begin{enumerate}
+    \item\textbf{ Keep $K_{p}$ constant. }We found no observable effect of frequency change on the proportional part. Probably because the proportional part of the calculation does not involve a change in time.
+    \item\textbf{ Keep overshoot \bm{$\leq10\%$}. }
+    \item\textbf{ Ensure PID controller reaches steady-state within 6 updates.} This is not practical for high frequency, so for high frequencies we try to minimize setting time  while still meeting the requires above. 
+\end{enumerate}
 
-%\begin{algorithm}
-%	\caption{Pseudo Codes}\label{pseudo:ppo}
-%	\begin{algorithmic}[1]
-%		\For {$iteration=1,2,\ldots$}
-%			\For {$actor=1,2,\ldots,N$}
-%				\State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
-%				\State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
-%			\EndFor
-%			\State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and mini-batch size $M\leq NT$
-%			\State $\theta_{old}\leftarrow\theta$
-%		\EndFor
-%	\end{algorithmic} 
-%\end{algorithm}
+%接下来解释算法
+
+\begin{algorithm}
+	\caption{Test Process}\label{TestMethod}
+	\begin{algorithmic}[1]
+        \State Find 15  
+	\For {$iteration=1,2,\ldots$}
+			\For {$actor=1,2,\ldots,N$}
+				\State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
+				\State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
+			\EndFor
+			\State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and mini-batch size $M\leq NT$
+			\State $\theta_{old}\leftarrow\theta$
+		\EndFor
+	\end{algorithmic} 
+\end{algorithm}
 
 \subsection{Discussion of Variables}
 % 3.B
