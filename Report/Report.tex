@@ -139,43 +139,72 @@ We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[
 \end{enumerate}
 
 %接下来解释算法
+% 对于f1-15中的每一个频率，我们都在其邻域中测试此频率所对应的PID参数的性能。取当前频率的前一个与后一个频率作为邻域的上下限（若没有前一个或后一个，则用自己代替）。在邻域中取十个等间距点，测试PID控制器的性能。
+
+For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood,with the PID parameter corresponding to $f_{i}$. The previous and next frequencies to the current frequency are taken as the upper and lower limits of the neighbourhood (if there is no previous or next, use $f_{i}$ instead). 10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller.
 
 \begin{algorithm}
 	\caption{Test Process}\label{TestMethod}
 	\begin{algorithmic}[1]
-        \State Find 15  
-	\For {$iteration=1,2,\ldots$}
-			\For {$actor=1,2,\ldots,N$}
-				\State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
-				\State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
+        \State Calculate 15  equidistant frequencies $f_{1}\sim f_{15}$ in range of $[2,500]$
+	\For {$f_{i}=f_{1},f_{2},\ldots,f_{15},$} 
+                \State Tune PID parameters $K_{i}$, $K_{d}$
+                \State Calculate 10 equidistant frequencies $f_{n1}\sim f_{n10}$ in range of $f_{i}$'s neighbourhood $[f_{i-1},f_{i+1}]$
+                \State In 4: if $i-1<0$ or $i+1>15$, use $f_{i}$ instead
+			\For {$f_{n}= f_{n1},f_{n2},\ldots,f_{n10}$}
+				\State Use step signal as left wheel speed set point.
+                \State Measure PID performance with step response.
+                \State Calculate the \textbf{mean} overshoot and setting time of \textbf{10 responses}.
 			\EndFor
-			\State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and mini-batch size $M\leq NT$
-			\State $\theta_{old}\leftarrow\theta$
 		\EndFor
 	\end{algorithmic} 
 \end{algorithm}
 
+% 整个实验除PID参数为预先调节并储存好以外，均为自动进行。最大程度减少了人为干预。
+ \textbf{The entire experiment is carried out automatically,} except for the PID parameters, which are pre-adjusted and stored. \textbf{Human intervention is minimised. The code we use has been shared on GitHub.} 
+ 
+% 我们使用邻域来进行测试，是为了在保证PID控制器稳定（来获得有意义的结果）的同时，展示不同频段上频率变化对PID控制器性能的影响。
+We use the neighbourhood to perform the test in order to demonstrate the effect of frequency variations on the performance of the PID controller over different frequency ranges while ensuring that the PID controller is stable (to obtain meaningful results).
+
 \subsection{Discussion of Variables}
 % 3.B
 % 你应该概述一下你的实验中的关键变量。这将有助于你的读者以后相信你的结果是可信的，而不会读不懂。
-You should outline the key variables within your experiment. This will help your reader to later believe your results are credible and not confused.
+Variables in this paper are: \bm{$K_{i}$}, \bm{$K_{d}$}, PID update frequency \bm{$f$}, left wheel speed set point \bm{$v$}.
 \begin{itemize}
     % 变量表
     % 受控变量：这些是你的实验（任务、硬件、软件、环境）的部分，这些部分可能会有变化，但你通过仔细设计实验来控制它们。例如，电池寿命不同，所以你将使用新电池。
-    \item \textbf{Controlled Variables}: These are the parts of your experiment (task, hardware, software, environment) which \emph{could} vary, but which you have controlled by careful design of your experiment.  For example, battery life varies, so you will use new batteries.
+    \item \textbf{Controlled Variables}: 
+        \begin{itemize}
+            \item Robot related variables: We use new battery for tests, also flip robot over during the whole test, make sure it's left wheel is free to spin and not blocked.
+            \item PID parameter \bm{$K_{p}$}: We use the same $K_{p}$ during the whole test, for we didn't find observable difference in PID proportion part.
+            \item Left wheel speed set point \bm{$v$}: We set it 1.00(m/s) as the given aim for PID controller.
+        \end{itemize}
     % 自变量：这是你要改变的实验部分，以便你希望观察到性能的可测量的改变。  请注意，我们曾经只想要一个自变量--有时我们以此为目标，但承认其他部分会发生变化，我们需要对我们的系统和/或结果进行仔细分析。
-    \item \textbf{Independent Variable}: This is the part of your experiment which you are changing so that you hope to observe a measurable alteration in performance.  Note that, we ever only want one independent variable - sometimes we aim for this, but concede other parts will change, and we need to make careful analysis of our system and/or results.
+    \item \textbf{Independent Variable}: 
+        \begin{itemize}
+            \item PID update frequency \bm{$f$}: We change the frequency across the whole range as previously described. 
+            \item PID parameter \bm{$K_{i}$} and \bm{$K_{d}$}: For each neighborhood we use a unique set of PID parameters, to keep PID stable at different frequencies. Since we are looking at the effect of frequency shift on performance in the same neighbourhood, this variable does not affect the experimental results. 
+        \end{itemize}
     % 因变量：这些是你的实验的一部分，你希望在其中观察到一个可测量的变化。  你将设计或选择适当的参数来测量和分析这个可依赖的变量。  例如，我们可以有一个系统的因变量，但使用平均值、模式和中位数的指标来分析它。
-    \item \textbf{Dependent Variable(s)}: These are the part(s) of your experiment in which you hope to observe a measurable change.  You will design or select appropriate \emph{metrics} to measure and analyse this dependable variable.  For example, we can have one dependent variable of the system, but use metrics of mean, mode and median to analyse it.
+    \item \textbf{Dependent Variable(s)}:  all metrics are \textbf{measured and calculated automatically by experiment program}.
+        \begin{itemize}
+            \item Overshoot(\%): The amount that the process variable overshoots the final value, expressed as a percentage of the final value.
+            \item Setting time(ms): If process variable shows three consecutive points are within $\pm5\%$ error of the final value, the system is considered stable and the setting time is recorded.
+            % 如果有连续三个点在给定值±5%范围内，则判定系统稳定，记录稳定时间
+        \end{itemize}
 \end{itemize}
 
 \subsection{Discussion of Metric(s)}
 % 3.C 讨论参数
 % 在这一部分，你应该讨论你选择指标的理由（为什么）--例如，这些指标如何帮助我们解释你的结果？  你的衡量标准需要在整个实验中得到一致的应用，以便提供性能的比较。  
 % 你应该讨论你的衡量标准的优点和缺点。  通常，我们需要一个以上的指标来弥补另一个指标中被混淆或隐藏的信息。  通过使用一个以上的指标，我们可以更接近于你的实验结果的真相。  
- In this section you should discuss the rationale (why) you have selected your metric(s) - e.g. how do these metrics help us to interpret your results?  Your metric(s) will need to be applied consistently throughout your experiment for them to provide a comparison of performance.  
- 
- You should discuss the advantages and disadvantages of your metric(s).  Often, we need more than one metric to compensate for the information which is confused or hidden in another metric.  By using more than one metric, we can get closer to the truth of the outcome of your experiment.  
+
+% 我们所使用的overshoot和setting time是经典的PID性能指标。我们放弃rise time和steady-state error是因为(1)我们观察到很多时候PID控制器第一次update就会产生overshoot，没有rise的过程。（2）在本实验中steady-state error有一点被customized setting time 覆盖了。且steady-state error往往很小，观测意义不大
+The overshoot and setting time that we use are classical PID performance metrics. We do not use rise time and steady-state error because \textbf{(1)} We observe that many times the PID controller produces overshoot on the first update and there is no rise process. \textbf{(2)} In this experiment the steady-state error is partially covered by the customised setting time. And the steady-state error is often so small that the observation is not of much significance.
+
+For a discrete controller, it may be unfair to use setting times (ms) to evaluate system performance at all frequencies, as lower frequencies naturally have longer setting times. 
+
+
 
 \section{Results}
 % 4.
