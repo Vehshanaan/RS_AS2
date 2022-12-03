@@ -422,7 +422,6 @@ f_neighoburs = np.array(f_neighbours)
 overshoot_results = np.array(overshoot_results)
 setting_results = np.array(setting_results)
 
-figure=plt.figure(figsize=[6,7])
 """
 # 原始大图
 figure = plt.figure()
@@ -465,6 +464,7 @@ for i in range(len(f_test)):
 plt.show()
 """
 
+figure=plt.figure(figsize=[6,7])
 
 #低频：
 for i in range(3):
