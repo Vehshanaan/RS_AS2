@@ -157,6 +157,8 @@ For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller per
 				\State Use step signal as left wheel speed set point.
                 \State Measure PID performance with step response.
                 \State Calculate the \textbf{mean} overshoot and setting time of \textbf{10 responses}.
+                \If{Controller failed to reach steady-state within \textbf{1 second}} Return a NaN value which represents system oscillate.                
+                \EndIf
 			\EndFor
 		\EndFor
 	\end{algorithmic} 
@@ -212,21 +214,26 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 % 4.
 % 在这一部分中，你应该介绍你的结果。 
 % 一般来说，最好是既要有 "定量 "的结果（如数据），又要有 "定性 "的结果（如有代表性的书面观察或图表）。  
-
 % 你应该在有助于清晰的地方使用分节。 
 % 例如，先介绍 "基础"系统的结果，然后介绍 "改进后"系统的结果，最后介绍同时考虑 "基线 "和 "改进 "系统的结果，这可能是有用的。  
 % 然而，这将完全取决于你的项目和你如何设计你的实验。
-
 % 在介绍结果时，应力求在介绍中清楚地传达一种见解。
 % 例如，一张包含所有单个数据的大表需要读者做大量的工作来找出重要的内容。 
 % 与此相反，一个适当展示平均数和标准差的表格已经为读者总结了结果（而且会更有用）。  
 % 同样，在可能的情况下，将数据合并到图表中，以便进行直接比较--在可能的情况下，包括误差条。  
-In this section you should present your results.  In general, it is best to aim for both \emph{quantitative} results (e.g., data) and \emph{qualitative} results (e.g., a written observation or graphic which is representative).  
 
-You should use subsections where they aid in clarity.  For instance, it may be useful to present results for a ``baseline" system, then a results for an ``improved" system, and then finally results which consider both ``baseline" and ``improved" systems together.  However, this will depend entirely on your project and how you have designed your experiment.
-
-When presenting results, aim for a presentation which clearly communicates an insight. For example, a large table of all the individual data requires the reader to do a lot of work to find out what is important.  In contrast, a table which appropriately presents the mean and standard deviation has summarised the results for the reader (and would be more useful).  Similarly, aim to combine data onto a chart when possible so that a direct comparison can be made - and when possible, include error bars.  
-
+% 克制自己，有的东西不该在这里讨论。而应该在v中详细介绍
+\subsection{Overview of Results}
+% 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
+The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$} and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
+\subsection{Result Details}
+Graph explanation: 
+\begin{itemize}
+    \item \textbf{Low Frequency(\bm{$f=[0,40]$}):} 
+    \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
+    \item \textbf{High Frequency(\bm{$f=[230,500]$}):}     
+\end{itemize}
+\subsection{Summary}
 
 % 记住标明所有的轴线，给所有的图表、数字和表格加上标题，并在报告文本中引用这些内容（例如，见图ref{fig1}）
 % --永远不要要求读者必须自己得出结论或理解，解释他们正在看什么。  
@@ -261,6 +268,10 @@ This is also a good opportunity to evaluate your experiment and project as a who
 \newpage
 \onecolumn
 \appendix
-
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix.png}}
+\caption{Overall result picture. Red dots represents oscillate.}% 遍历频率域的方法
+\label{fig_appendix}
+\end{figure}
 
 \end{document}
