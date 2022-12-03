@@ -422,11 +422,11 @@ f_neighoburs = np.array(f_neighbours)
 overshoot_results = np.array(overshoot_results)
 setting_results = np.array(setting_results)
 
-
-figure = plt.figure()
-
+figure=plt.figure(figsize=[6,7])
 """
 # 原始大图
+figure = plt.figure()
+
 for i in range(len(f_test)):
     # 超调
     plt.subplot(2, 1, 1)
@@ -464,6 +464,9 @@ for i in range(len(f_test)):
     plt.legend()
 plt.show()
 """
+
+
+#低频：
 for i in range(3):
     # 超调
     plt.subplot(2, 1, 1)
@@ -483,6 +486,7 @@ for i in range(3):
     # 无效数据：
     plt.scatter(current_offset[np.invert(overshoot_mask)], np.zeros(
         len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
+    plt.ylim = ([-2,30])
     plt.xlim([-2, 40])
     plt.ylabel("Overshoot (%)", fontsize=10)
     plt.xlabel("PID Frequency (Hz)", fontsize=10)
@@ -502,3 +506,4 @@ for i in range(3):
     plt.xlim([-2, 40])
     plt.legend()
 plt.show()
+
