@@ -445,8 +445,8 @@ for i in range(len(f_test)):
     # 无效数据：
     plt.scatter(current_offset[np.invert(overshoot_mask)], np.zeros(
         len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
-    plt.ylabel("Overshoot (%)")
-    plt.xlabel("PID Frequency (Hz)")
+    plt.ylabel("Overshoot (%)", fontsize=20)
+    plt.xlabel("PID Frequency (Hz)", fontsize=20)
     plt.legend()
 
     # 调节时间：
@@ -457,8 +457,8 @@ for i in range(len(f_test)):
     # 无效数据：
     plt.scatter(current_offset[np.invert(setting_mask)], np.zeros(
         len(current_offset))[np.invert(setting_mask)], marker="*", color="r")
-    plt.ylabel("Setting time (ms)")
-    plt.xlabel("PID Frequency (Hz)")
+    plt.ylabel("Setting time (ms)", fontsize=20)
+    plt.xlabel("PID Frequency (Hz)", fontsize=20)
     plt.ylim([-5, 200])
     plt.legend()
 plt.show()
