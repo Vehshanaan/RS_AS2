@@ -422,6 +422,7 @@ f_neighoburs = np.array(f_neighbours)
 overshoot_results = np.array(overshoot_results)
 setting_results = np.array(setting_results)
 
+
 """
 # 原始大图
 figure = plt.figure()
@@ -463,11 +464,9 @@ for i in range(len(f_test)):
     plt.legend()
 plt.show()
 """
-
-figure=plt.figure(figsize=[6,6.5])
-
-#低频：
-for i in range(3):
+# 中频
+figure = plt.figure(figsize=(6,8))
+for i in range(1,8):
     # 超调
     plt.subplot(2, 1, 1)
 
@@ -486,10 +485,11 @@ for i in range(3):
     # 无效数据：
     plt.scatter(current_offset[np.invert(overshoot_mask)], np.zeros(
         len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
-    plt.ylim = ([-2,30])
-    plt.xlim([-2, 40])
     plt.ylabel("Overshoot (%)", fontsize=10)
     plt.xlabel("PID Frequency (Hz)", fontsize=10)
+    my_x_ticks = np.arange(35, 235, 10)      #显示范围为-5至5，每10显示一刻度
+    plt.xticks(my_x_ticks)
+    plt.xlim([35,235])
     plt.legend()
 
     # 调节时间：
@@ -502,8 +502,12 @@ for i in range(3):
         len(current_offset))[np.invert(setting_mask)], marker="*", color="r")
     plt.ylabel("Setting time (ms)", fontsize=10)
     plt.xlabel("PID Frequency (Hz)", fontsize=10)
-    #plt.ylim([-5, 200])
-    plt.xlim([-2, 40])
+    plt.ylim([-5, 200])
+    plt.xticks(my_x_ticks)
+    plt.xlim([35,235])
     plt.legend()
 plt.show()
+
+
+
 
