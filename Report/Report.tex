@@ -230,7 +230,7 @@ The overall results of the experiment are detailed in the figure in the appendix
 Graph explanation: Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
 % 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
 \begin{itemize}
-    \item \textbf{Low Frequency(\bm{$f=[0,40]$}):}
+    \item \textbf{Low Frequency(\bm{$f=[0,40]$}):} Fig. \ref{fig_LowFrequency}.
         \begin{figure}[htbp]
         \centerline{\includegraphics[width=\linewidth]{Report/Pic/ResultLowFrequency.png}}
         \caption{Low update frequency PID performance.}
@@ -238,33 +238,38 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
         \end{figure}
         %超调和调节时间最大。其中，调节时间明显比其他频段更长。随着频率上升，系统的调节时间和超调展现出逐渐减小的趋势。图右侧的四个红点是2邻域最右侧点发生震荡，左侧的两个红点是37.57邻域的最左侧两个点发生震荡。 
         \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the graph are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the two red dots on the left side are the leftmost two points of the $f=37.57$ neighbourhood where oscillation occurs. 
-    \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
+    \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} Fig. \ref{fig_MediumFrequency}.
         %PID控制器在此频段中性能最好。有最低的超调和调节时间。性能仍然随频率上升而改善。注意，随着频率上升，开始出现一些离散的易震荡频段，在这些频段中PID控制器突然变得非常容易震荡。这样的易震荡频段随频率上升而增多。图中所有的离群点都是位于震荡频段边缘的点。
-        \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. All the outliers in the graph are points at the edges of the oscillatory bands.
+        \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. \textbf{All the outliers in the graph are points at the edges of the oscillatory bands.}
         \begin{figure}
             \centering
-            \includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency.png}
+            \includegraphics[width=1.25\linewidth]{Report/Pic/ResultMediumFrequency.png}
             \caption{Medium update frequency PID performance.}
             \label{fig_MediumFrequency}
         \end{figure}
-    \item \textbf{High Frequency(\bm{$f=[230,500]$}):}\\
+    \item \textbf{High Frequency(\bm{$f=[230,500]$}):} Fig. \ref{fig_HighFrequency}.
+    \\
+    % 性能开始随频率的上升而下降。超调量和调节时间都开始逐渐上升。同时，此频段的震荡频段进一步增加，大多频率点都发生了震荡。但这种震荡与低频段的震荡是不同的，这种震荡更多代表的是稳态的不稳定。我们在后面详聊。
+    The performance starts to \textit{decrease} as the frequency rises. Both the overshoot and the setting time begin to rise gradually. At the same time, the oscillation band in this frequency band increases further, with oscillation occurring at most frequency points. However, this oscillation is different from the oscillation in the low frequency bands. Such oscillation represents more of a steady-state instability. We describe this in section \ref{V_Discussion and Conclusion}.
         \begin{figure}
             \centering
-            \includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency.png}
-            \caption{Medium update frequency PID performance.}
-            \label{fig_MediumFrequency}
+            \includegraphics[width=1.05\linewidth]{Report/Pic/ResultHighFrequency.png}
+            \caption{High update frequency PID performance.}
+            \label{fig_HighFrequency}
         \end{figure}
-        
 \end{itemize}
 \subsection{Summary}
+% 随着更新频率的提升，PID控制器的性能先提升后下降，这一规律也出现在使用同一组PID参数的单一邻域中。随着频率的升高，出现了若干不连续的震荡频段，频率越高震荡频段越多越长。
+
+\textbf{As the update frequency increases, the performance of the PID controller improves and then decreases}, this pattern also appears in some single neighbourhoods which use the same set of PID parameters. \textbf{As the frequency increases, a number of discontinuous oscillation bands appear,} with more and longer oscillation bands at higher frequencies.
 
 % 记住标明所有的轴线，给所有的图表、数字和表格加上标题，并在报告文本中引用这些内容（例如，见图ref{fig1}）
 % --永远不要要求读者必须自己得出结论或理解，解释他们正在看什么。  
 % 记住要尝试对你的结果中的任何异常情况做出解释。  
-Remember to label all axis, caption all graphs, figures and tables, and to reference these elements in the report text (e.g. see figure \ref{fig1}) - never require a reader to have to come to their own conclusion or understanding, explain what they are looking at.  Remember to attempt to give an explanation for any anomalies in your results.  
 
 
 \section{Discussion and Conclusion}
+\label{V_Discussion and Conclusion}
 % 5.
 % 通过重新陈述你的假设来开始你的讨论和结论。  你可以在这里复制和粘贴你的假设。  
 Begin your discussion and conclusion by re-stating your hypothesis.  You can literally copy-and-paste your hypothesis here.  
