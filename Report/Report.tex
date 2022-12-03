@@ -235,20 +235,11 @@ Graph explanation:
         \caption{Low update frequency PID performance.}
         \label{fig_FrequencyRange}
         \end{figure}
-        111
+        %超调和调节时间最大。其中，调节时间明显比其他频段更长。随着频率上升，系统的调节时间和超调展现出逐渐减小的趋势。图右侧的四个红点是2邻域最右侧点发生震荡，左侧的两个红点是37.57邻域的最左侧两个点发生震荡。 
+        Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the graph are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the two red dots on the left side are the leftmost two points of the $f=37.57$ neighbourhood where oscillation occurs. 
     \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
-        \begin{figure}[htbp]
-        \centerline{\includegraphics[width=\linewidth]{Report/Pic/ResultLowFrequency.png}}
-        \caption{Low update frequency PID performance.}
-        \label{fig_FrequencyRange}
-        \end{figure}
-        111
+        %PID控制器在此频段中性能最好。有最低的超调和调节时间。
     \item \textbf{High Frequency(\bm{$f=[230,500]$}):}
-        \begin{figure}[htbp]
-        \centerline{\includegraphics[width=\linewidth]{Report/Pic/ResultLowFrequency.png}}
-        \caption{Low update frequency PID performance.}
-        \label{fig_FrequencyRange}
-        \end{figure}
         111
 \end{itemize}
 \subsection{Summary}
@@ -273,6 +264,8 @@ Because the VL1680X has been identified as an active sensor with ... limitations
 % 在你的讨论中，将此作为另一个展示/证明你的理解的机会。尽量避免陈述显而易见的事情
 % --相反，用分析/评价/综合来表明你了解你是如何和为什么看到这样的结果的。 
 % 你的发现有什么意义？  
+
+% 记得说:大多数邻域到右边都抬头了，左边都大震荡了
 Make a discussion of what your results showed - whether this supported or refuted your hypothesis.  It may be that the results were mixed (supporting and refuting) and you should discuss that here. In your discussion, use this as another opportunity to demonstrate/evidence your understanding. Try to avoid stating the obvious - instead, use analysis/evaluation/synthesis to show that you understand \emph{how} and \emph{why} you saw the results you did.  What are the implications of your findings?  
 % 这也是评估你的实验和项目整体的一个好机会。  
 % 你可能希望进一步讨论研究的局限性（例如，控制/自变量的难度，或你在项目中面临的任何问题）。 
