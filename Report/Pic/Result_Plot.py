@@ -464,7 +464,7 @@ for i in range(len(f_test)):
 plt.show()
 """
 
-figure=plt.figure(figsize=[6,7])
+figure=plt.figure(figsize=[6,6.5])
 
 #低频：
 for i in range(3):
