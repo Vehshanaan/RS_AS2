@@ -227,20 +227,34 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
 The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$} and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
 \subsection{Result Details}
-Graph explanation: 
+Graph explanation: Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
+% 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
 \begin{itemize}
     \item \textbf{Low Frequency(\bm{$f=[0,40]$}):}
         \begin{figure}[htbp]
         \centerline{\includegraphics[width=\linewidth]{Report/Pic/ResultLowFrequency.png}}
         \caption{Low update frequency PID performance.}
-        \label{fig_FrequencyRange}
+        \label{fig_LowFrequency}
         \end{figure}
         %超调和调节时间最大。其中，调节时间明显比其他频段更长。随着频率上升，系统的调节时间和超调展现出逐渐减小的趋势。图右侧的四个红点是2邻域最右侧点发生震荡，左侧的两个红点是37.57邻域的最左侧两个点发生震荡。 
-        Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the graph are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the two red dots on the left side are the leftmost two points of the $f=37.57$ neighbourhood where oscillation occurs. 
+        \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the graph are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the two red dots on the left side are the leftmost two points of the $f=37.57$ neighbourhood where oscillation occurs. 
     \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
-        %PID控制器在此频段中性能最好。有最低的超调和调节时间。
-    \item \textbf{High Frequency(\bm{$f=[230,500]$}):}
-        111
+        %PID控制器在此频段中性能最好。有最低的超调和调节时间。性能仍然随频率上升而改善。注意，随着频率上升，开始出现一些离散的易震荡频段，在这些频段中PID控制器突然变得非常容易震荡。这样的易震荡频段随频率上升而增多。图中所有的离群点都是位于震荡频段边缘的点。
+        \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. All the outliers in the graph are points at the edges of the oscillatory bands.
+        \begin{figure}
+            \centering
+            \includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency.png}
+            \caption{Medium update frequency PID performance.}
+            \label{fig_MediumFrequency}
+        \end{figure}
+    \item \textbf{High Frequency(\bm{$f=[230,500]$}):}\\
+        \begin{figure}
+            \centering
+            \includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency.png}
+            \caption{Medium update frequency PID performance.}
+            \label{fig_MediumFrequency}
+        \end{figure}
+        
 \end{itemize}
 \subsection{Summary}
 
