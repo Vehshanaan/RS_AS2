@@ -37,29 +37,58 @@
 \maketitle
 
 \begin{abstract}
-It is normal to write the abstract last.  First, try to concisely state the problem/question/challenge under investigation.  Second, state what you found out.  The abstract should help a reader decide if they are interested in reading the whole paper.  
+%最后写摘要是正常的。  
+%首先，尽量简明扼要地说明所调查的问题/疑问/挑战。  
+%第二，说明你发现了什么。  摘要应该帮助读者决定他们是否有兴趣阅读整篇论文。  
+% 本文基于Pololu 3pi+ 32U4 robot研究了PID控制器性能与其update frequency的关系。我们在2-500的频率范围内进行了多次实验，总结了变化的规律，最终发现高频和低频都会使PId的控制性能降低，对于实验中的被控对象，40-120是性能最佳的频率范围。
+In this paper we investigated the relationship between PID controller performance and its update frequency based on the Pololu 3pi+ 32U4 robot. We conducted several experiments in the frequency range of 2\bm{$\sim$}500 and summarised the pattern, eventually finding that both high and low frequencies degrade the control performance of the PID controller, and that 40\bm{$\sim$}120 is the best frequency range for the performance of the object being controlled in the experiments.
 \end{abstract}
 
 
 \section{Introduction}
-Use the introduction to explain your project (problem/question/challenge) to the reader.  To do this well, you will need to provide some background context.  It can be useful to imagine you are writing for someone who would be able to understand your work, but who is not familiar with it.  You should assume the examiner of this report has \textbf{not} seen your project before.   
+\label{Introduction}
+Proportional-integral-derivative (PID) control is the most commonly used control algorithm in the industry and has become universally accepted in industrial control\cite{knospe2006pid}. For autonomous robotic systems that can travel, 
+% 对于任何需要追踪给定量的控制系统来说，PID都是非常重要的算法。通过PID算法，可以在没有系统精细数学模型的情况下，完成系统的无静差控制量追踪。所以，PID控制器的性能与参数的关系是一个实用且重要的研究方向。
+PID is a important algorithm for any control system that needs to track a given amount of quantity. With the PID algorithm, it is possible to accomplish steady-state error free target tracking of a system without a fine-grained mathematical model of the system. Therefore, the performance of PID controllers in relation to parameters is an important research area and has strong integration with practical applications.
+% PID控制的运算中包含时间变化，所以PID控制器的性能会受到其更新频率的影响。
+PID control algorithm include time variation, so the performance of the PID controller is affected by its update frequency. Update frequency is a hidden parameter for PID controller other than the well-known $K_{p}$, $K_{i}$, and $K_{d}$. 
+ If an optimum frequency range is found to improve the PID performance, this will provide a reference for future commissioning of other control systems to obtain better performance.
 
-For example, you may need to explain how a sensor works, including the advantages and disadvantages, in order for your reader to properly understand the \emph{value} of your investigation.  You want your reader to agree that this is an interesting project, as well as for your reader to understand \emph{why}. 
-
-You are encouraged to use specialist language and concepts covered in the unit to explain the background context of your project.  Where relevant, you are encouraged to reference external sources of information, such as technical datasheets, online articles\cite{picard2001toward}\cite{beck2010towards}, or academic literature.  Try to write your report both to explain it well and to demonstrate what you have learnt.
+A typical PID step response\cite{goodwin2001control} is shown in Fig. \ref{PIDandSettlingTime}. The blue line in the figure shows the process of a PID controller tracking the target. % PID控制器的任务就是使蓝色线条（被控量）在一定时间内达到target值。对于这个控制过程，还有一些常见的性能衡量指标，如图中所示的overshoot，setting time等。我们会在23两节详细解释这部分内容。
+The task of the PID controller is to make the blue line (the controlled value) reach the target value within a certain time. There are also some common performance metrics for this control process, such as overshoot, setting time, etc. shown in the 
+ Fig. \ref{PIDandSettlingTime}. We will explain this part in more detail in following sections(\ref{Implementation}, \ref{Experiment Methodology}).
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.9\linewidth]{Report/Pic/PIDandSettlingTime.png}}
+\caption{Typical PID step response and PID performance metrics.}
+\label{PIDandSettlingTime}
+\end{figure}
 
 \subsection{Hypothesis Statement}
+% 我们的假设可以归纳为以下三句话：
+Our hypothesis can be summarised as follows:
+\begin{enumerate}
+    \item High update frequency makes the PID controller changes can not be reflected in time on the controlled object, and reduce the performance.
+    \item Low update frequency leads to a slow response speed\cite{knospe2006pid}, which affect real-time controlling and therefore controller performance.
+    \item In the frequency range, there could be an optimal frequency band that can better balance all aspects of the PID to achieve better performance.
+\end{enumerate}
 
-Because formulating a hypothesis is central to this assessment, it is recommended you write your hypothesis into a clear subsection (this subsection) as specified in this report template.  Because you have introduced your work well above (providing key background context and specialist knowledge) you can be quite literal here with your hypothesis.  For example: 
+To investigate our hypothesis, we implemented a basic PID controller based on Pololu 3pi+ 32U4 robot, designed a set of experiments, and \textbf{tested the relationship between the PID controller update frequency and it's performance}.
+\subsection{Report Structure}
+\begin{enumerate}
+    \\\textbf{\ref{Introduction}. Introduction:} A brief introduction to our research topic and our hypothesis.
+    \\\textbf{\ref{Implementation}. Implementation:} Introduction to the hardware system and control algorithms used for the experiments.
+    \\\textbf{\ref{Experiment Methodology}. Experiment Methodology:} Details of the experiment procedures, the flow of the automatic experiment program, the variables involved in the experiments, and the metrics for performance evaluation.
+    \\\textbf{\ref{Results}. Results:} The results observed in our experiment, from both the metrics and behind the metrics.
+    \\\textbf{\ref{V_Discussion and Conclusion}. Discussion and Conclusion:} The significance of the experimental results for our hypothesis, the existing shortcomings in the experiment, and the direction of future work.
+    
+\end{enumerate}
 
-Because the VL1680X has been identified as an active sensor with ... limitations, we hypothesise that:
-\begin{quote}
-    by applying ... filtering to the sensor, we predict a measurable improvement of the sensor under ... conditions.  
-\end{quote}
 
-We investigate this hypothesis through a structured experiment on the Pololu 3Pi+ mobile robot, comparing the performance of the sensor with and without our technique.  
+
+
 
 \section{Implementation}
+\label{Implementation}
 % 2.
 % 在这一节中，你应该描述你的实现的具体细节，以便你的读者可以重新创建你的工作。  
 % 如果你使用了一个已经被广泛理解的算法或技术，你可以只参考一个外部来源而不详细解释，除非解释算法/技术为读者提供了关于你的项目的重要信息。 
@@ -92,10 +121,10 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
         \end{equation}
         $u(t)$:PID controller output
         \par
-    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to drive the wheels.
+    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to drive the wheels. The relationship between wheel speed and PWM duty cycle is shown in Fig. \ref{fig_WheelCharacter}.
     %插入电机速度与输入的特性图 %
     % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
-    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. It also means that there is some error in the velocity calculations (it is difficult to measure the exact code count of one lap), but the velocity error has no effect on the experiments in this paper.
+    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. It also means that there is some error in the velocity calculations (it is no exact code count for one whole lap), but the velocity error has no effect on the experiments in this paper, for we are looking at relationships rather than specific values.
     % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
     \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the encoder value with the circumference of the wheel in order to calculate the robot kinematics. In this paper only the wheel speed part of the kinematics is needed.
 
@@ -110,6 +139,7 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
 
 
 \section{Experiment Methodology}
+\label{Experiment Methodology}
 % 3.
 % 在这一节中，记录你是如何组织（设计）你的实验的，从而使其他人可以很容易地重新创造你的工作。  
 % 你也希望你的读者同意你仔细考虑了你的实验，这样我们就可以相信你的结果是有意义的，而且是可信的（没有错误）。 
@@ -124,7 +154,7 @@ To test our hypothesis, we investigated the effect of PID update frequency on th
 % 3.A
 % 向读者描述你的实验的一般结构和程序。你应该提供一个有点像蛋糕食谱的规格。 
 % 例如：你的实验持续多长时间？ 你使用多少次重复试验？有多少种备用方案？
-The main focus of the experiment was to \textbf{keep the PID parameters constant and change the update frequency of the PID controller to observe the change in performance metrics} (overshoot, setting time). A frequency range of \textbf{2Hz $\sim$ 500Hz} was selected for testing based on the actual control requirements and hardware performance limitations (outside of this range the controller output can oscillate violently). Using the same set of PID parameters for the entire frequency range would produce oscillations at most of the tested frequencies and produce meaningless test data, so we adopted the following approach: 
+The main focus of the experiment was to \textbf{keep the PID parameters constant and change the update frequency of the PID controller to observe the change in performance metrics} (overshoot, setting time). A frequency range of \textbf{2Hz $\sim$ 500Hz} was selected for testing based on the actual control requirements and hardware performance limitations (outside of this range the controller output can oscillate violently). \textbf{Using the same set of PID parameters for the entire frequency range would produce oscillations at most of the tested frequencies and produce meaningless test data}, so we adopted the following approach: 
 % 实验的主要内容就是保持PID参数不变，改变PID控制器的update freqeucy， 观察性能指标（overshoot, setting time）的变化。根据实际控制的需求和硬件性能的限制，我们选定2Hz~500Hz的频率范围来进行测试（在此范围外控制器输出会产生剧烈震荡）。对整个频率范围使用同一组PID参数会使大部分受试频率产生震荡，产生无意义的测试数据，因此我们采用这样的方法：
 
 % 插入系统框图
@@ -136,7 +166,7 @@ The main focus of the experiment was to \textbf{keep the PID parameters constant
 
 We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[2,500]$,  and \textbf{for each frequency we tune a set of PID parameters. Parameter tuning follows a common principle:}
 \begin{enumerate}
-    \item\textbf{ Keep $K_{p}$ constant. }We found no observable effect of frequency change on the proportional part. Probably because the proportional part of the calculation does not involve a change in time.
+    \item\textbf{ Keep \bm{$K_{p}$} constant. }We found no observable effect of frequency change on the proportional part. Probably because the proportional part of the calculation does not involve a change in time.
     \item\textbf{ Keep overshoot \bm{$\leq10\%$}. }
     \item\textbf{ Ensure PID controller reaches steady-state within 6 updates.} This is not practical for high frequency, so for high frequencies we try to minimize setting time  while still meeting the requires above. 
 \end{enumerate}
@@ -144,21 +174,21 @@ We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[
 %接下来解释算法
 % 对于f1-15中的每一个频率，我们都在其邻域中测试此频率所对应的PID参数的性能。取当前频率的前一个与后一个频率作为邻域的上下限（若没有前一个或后一个，则用自己代替）。在邻域中取十个等间距点，测试PID控制器的性能。
 
-For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood,with the PID parameter corresponding to $f_{i}$. The previous and next frequencies to the current frequency are taken as the upper and lower limits of the neighbourhood (if there is no previous or next, use $f_{i}$ instead). 10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller.
+For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood,with the PID parameter tuned for $f_{i}$. The previous frequency ($f_{i-1}$) and next frequency ($f_{i+1}$) to the current frequency are taken as the upper and lower limits of the neighbourhood (if there is no previous or next, use $f_{i}$ instead). 10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller.
 
 \begin{algorithm}
 	\caption{Test Process}\label{TestMethod}
 	\begin{algorithmic}[1]
         \State Calculate 15  equidistant frequencies $f_{1}\sim f_{15}$ in range of $[2,500]$
 	\For {$f_{i}=f_{1},f_{2},\ldots,f_{15},$} 
-                \State Tune PID parameters $K_{i}$, $K_{d}$
+                \State Tune PID parameters $K_{i}$, $K_{d}$ for $f_{i}$
                 \State Calculate 10 equidistant frequencies $f_{n1}\sim f_{n10}$ in range of $f_{i}$'s neighbourhood $[f_{i-1},f_{i+1}]$
                 \State In 4: if $i-1<0$ or $i+1>15$, use $f_{i}$ instead
 			\For {$f_{n}= f_{n1},f_{n2},\ldots,f_{n10}$}
-				\State Use step signal as left wheel speed set point.
-                \State Measure PID performance with step response.
-                \State Calculate the \textbf{mean} overshoot and setting time of \textbf{10 responses}.
-                \If{Controller failed to reach steady-state within \textbf{1 second}} Return a NaN value which represents system oscillate.                
+				\State Use step signal as left wheel speed set point
+                \State Measure PID performance with step response
+                \State Calculate the \textbf{mean} overshoot and setting time of \textbf{10 responses}
+                \If{Controller failed to reach steady-state within \textbf{1 second}} Return a NaN value which represents system oscillate        
                 \EndIf
 			\EndFor
 		\EndFor
@@ -169,12 +199,13 @@ For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller per
  \textbf{The entire experiment is carried out automatically,} except for the PID parameters, which are pre-adjusted and stored. \textbf{Human intervention is minimised. The code we use has been shared on GitHub.} 
  
 % 我们使用邻域来进行测试，是为了在保证PID控制器稳定（来获得有意义的结果）的同时，展示不同频段上频率变化对PID控制器性能的影响。
-We use the neighbourhood to perform the test in order to demonstrate the effect of frequency variations on the performance of the PID controller over different frequency ranges while ensuring that the PID controller is stable (to obtain meaningful results).
+We use neighbourhoods to perform the test in order to demonstrate the effect of frequency variations on the performance of the PID controller over different frequency ranges while ensuring that the PID controller is stable (to obtain meaningful results).
 
 \subsection{Discussion of Variables}
+\label{DiscussionOfVariables}
 % 3.B
 % 你应该概述一下你的实验中的关键变量。这将有助于你的读者以后相信你的结果是可信的，而不会读不懂。
-Variables in this paper are: \bm{$K_{i}$}, \bm{$K_{d}$}, PID update frequency \bm{$f$}, left wheel speed set point \bm{$v$}.
+Variables in this experiment are: \bm{$K_{p}$}, \bm{$K_{i}$}, \bm{$K_{d}$}, PID update frequency \bm{$f$}, left wheel speed set point \bm{$v$}.
 \begin{itemize}
     % 变量表
     % 受控变量：这些是你的实验（任务、硬件、软件、环境）的部分，这些部分可能会有变化，但你通过仔细设计实验来控制它们。例如，电池寿命不同，所以你将使用新电池。
@@ -188,7 +219,7 @@ Variables in this paper are: \bm{$K_{i}$}, \bm{$K_{d}$}, PID update frequency \b
     \item \textbf{Independent Variable}: 
         \begin{itemize}
             \item PID update frequency \bm{$f$}: We change the frequency across the whole range as previously described. 
-            \item PID parameter \bm{$K_{i}$} and \bm{$K_{d}$}: For each neighborhood we use a unique set of PID parameters, to keep PID stable at different frequencies. Since we are looking at the effect of frequency shift on performance in the same neighbourhood, this variable does not affect the experimental results. 
+            \item PID parameter \bm{$K_{i}$} and \bm{$K_{d}$}: For each neighborhood we use a unique set of PID parameters, to keep PID stable at different frequencies. Since we are looking at the effect of frequency shift on performance in the same neighbourhood, these variable have no affect on the experimental results. 
         \end{itemize}
     % 因变量：这些是你的实验的一部分，你希望在其中观察到一个可测量的变化。  你将设计或选择适当的参数来测量和分析这个可依赖的变量。  例如，我们可以有一个系统的因变量，但使用平均值、模式和中位数的指标来分析它。
     \item \textbf{Dependent Variable(s)}:  all metrics are \textbf{measured and calculated automatically by experiment program}.
@@ -199,19 +230,21 @@ Variables in this paper are: \bm{$K_{i}$}, \bm{$K_{d}$}, PID update frequency \b
         \end{itemize}
 \end{itemize}
 
-\subsection{Discussion of Metric(s)}
+\subsection{Discussion of Metrics}
+\label{Metrics}
 % 3.C 讨论参数
 % 在这一部分，你应该讨论你选择指标的理由（为什么）--例如，这些指标如何帮助我们解释你的结果？  你的衡量标准需要在整个实验中得到一致的应用，以便提供性能的比较。  
 % 你应该讨论你的衡量标准的优点和缺点。  通常，我们需要一个以上的指标来弥补另一个指标中被混淆或隐藏的信息。  通过使用一个以上的指标，我们可以更接近于你的实验结果的真相。  
 
 % 我们所使用的overshoot和setting time是经典的PID性能指标。我们放弃rise time和steady-state error是因为(1)我们观察到很多时候PID控制器第一次update就会产生overshoot，没有rise的过程。（2）在本实验中steady-state error有一点被customized setting time 覆盖了。且steady-state error往往很小，观测意义不大
-The overshoot and setting time that we use are classical PID performance metrics. We do not use rise time and steady-state error because \textbf{(1)} We observe that many times the PID controller produces overshoot on the first update and there is no rise process. \textbf{(2)} In this experiment the steady-state error is partially covered by the customised setting time. And the steady-state error is often so small that the observation is not of much significance.
+The overshoot and setting time that we use are classical PID performance metrics. We do not use rise time and steady-state error because \textbf{(1)} We observe that many times the PID controller produces overshoot on the first update and there is no rise process. \textbf{(2)} In this experiment the steady-state error is partially covered by the customised setting time. And the steady-state error is often so small that the observation is not of much significance. Also note that the setting time we use is customized for programming.
 
 For a discrete controller, it may be unfair to use setting times (ms) to evaluate system performance at all frequencies, as lower frequencies naturally have longer setting times. 
 
 
 
 \section{Results}
+\label{Results}
 % 4.
 % 在这一部分中，你应该介绍你的结果。 
 % 一般来说，最好是既要有 "定量 "的结果（如数据），又要有 "定性 "的结果（如有代表性的书面观察或图表）。  
@@ -226,9 +259,9 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 % 克制自己，有的东西不该在这里讨论。而应该在v中详细介绍
 \subsection{Overview of Results}
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
-The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$} and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
+The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$}, and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
 \subsection{Result Details}
-Graph explanation: Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
+    \textbf{Graph explanation:} Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
 % 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
 \begin{itemize}
     \item \textbf{Low Frequency(\bm{$f=[0,40]$}):} Fig. \ref{fig_LowFrequency}.
@@ -244,7 +277,7 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
         \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. \textbf{All the outliers in the graph are points at the edges of the oscillatory bands.}
         \begin{figure}
             \centering
-            \includegraphics[width=1.25\linewidth]{Report/Pic/ResultMediumFrequency.png}
+            \includegraphics[width=\linewidth]{Report/Pic/ResultMediumFrequency.png}
             \caption{Medium update frequency PID performance.}
             \label{fig_MediumFrequency}
         \end{figure}
@@ -346,7 +379,7 @@ We also analysed the results and observed phenomena such as: sources of robot ki
 % 我们的工作也有一些局限性：
 Our work also has \textbf{limitations}:
 \begin{itemize}
-    \item Simplified control objects: we use robot left wheel idle speed as controlled object, which is clearly simplifid.
+    \item Simplified control objects: we use robot left wheel idle speed as controlled object and step signal as controlling target, which is clearly simplified for research.
     \item Versatility: The experimental results are only for the current controlled object and may not be generalised if the control environment changes (e.g. motor load changes).
     \item PID parameters: The lack of precise criteria for determining PID parameters may have artificially interference with the experimental results.
 \end{itemize}
@@ -362,7 +395,6 @@ Our work also has \textbf{limitations}:
 % 这也是评估你的实验和项目整体的一个好机会。  
 % 你可能希望进一步讨论研究的局限性（例如，控制/自变量的难度，或你在项目中面临的任何问题）。 
 % 你可能希望对未来的工作提出建议--但要确保这是从你所获得的理解中获得的明确进展，而不是胡乱猜测。
-
 
 
 \bibliographystyle{ieeetr} 
