@@ -561,7 +561,7 @@ Kd = np.array([1000, 3.243, 2.52, 2.55, 2.19, 2.05, 1.97, 1.93, 1.91, 1.89, 2.9,
 
 
 # Ki变化趋势的分析：
-fig=plt.figure(figsize=[9,4])
+fig=plt.figure(figsize=[9,9])
 for i in range(len(f_test)):
     plt.subplot(2,1,1)
     plt.plot(f_test,Ki,marker="o",color="b")
@@ -570,7 +570,7 @@ for i in range(len(f_test)):
     my_x_ticks = np.array(f_test)
     plt.xticks(my_x_ticks)
     plt.ylabel("Ki",fontsize="12")
-    plt.xlabel("f (Hz)",fontsize="12")
+    plt.xlabel("f (Hz)",fontsize="13")
     plt.grid(linestyle=":")
 
 
@@ -586,7 +586,7 @@ for i in range(len(f_test)):
     plt.xticks(my_x_ticks,fontsize="10")
     plt.yticks(fontsize="12")
     plt.ylabel("Ki",fontsize="14")
-    plt.xlabel("f (Hz)",fontsize="12")
+    plt.xlabel("f (Hz)",fontsize="13")
     plt.grid(linestyle=":")
 plt.show()
 
