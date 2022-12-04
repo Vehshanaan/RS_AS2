@@ -259,7 +259,7 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
         \end{figure}
 \end{itemize}
 \subsection{Behind Metrics}
-\label{BeyondMetrics}
+\label{BehindMetrics}
 % 震荡
 % PID参数变化趋势
 % 高速时运动学计算比轮子旋转快的问题
@@ -277,12 +277,14 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
     % 在我们为频率范围内的点调节PID参数时，我们观察到了以下特点：
     When we tuned the PID parameters for points in the frequency range, we observed the following characteristics:
     \begin{enumerate}
-        \item \bm{$K_{i}$}:
-        \item \bm{$K_{d}$}:
+        % Ki: 从极低（0.045）开始，随频率上升而增加，在f=322.1处突然减小，但仍保持与频率的正相关。
+        % Ki: 从极高（0.045）开始，随频率上升而增加，在f=322.1处突然减小，然后保持不变。
+        \item \bm{$K_{i}$}: Starting at a very low value (0.045) and increasing with frequency, it suddenly decreases at $f = 322.1$, but still maintains a positive correlation with frequency.
+        \item \bm{$K_{d}$}: Starting at a outlier high value (1000.00) and decreasing with frequency, it suddenly increases at $f = 322.1$, and remains stable (i.e., in our test, $K_{d}$ has little influence to performance in high frequency band).
         \begin{figure}
             \centering
             \includegraphics[width=\linewidth]{Report/Pic/KiKdTrend.png}
-            \caption{Medium update frequency PID performance.}
+            \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}.}
             \label{KiTrend}
         \end{figure}
     \end{enumerate}
