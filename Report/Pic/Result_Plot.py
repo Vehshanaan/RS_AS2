@@ -470,6 +470,7 @@ for i in range(len(f_test)):
     plt.grid(linestyle=":")
 plt.show()
 """
+"""
 # 低频
 figure = plt.figure(figsize=(6,8))
 for i in range(0,3):
@@ -512,8 +513,9 @@ for i in range(0,3):
     plt.legend()
     plt.grid(linestyle=":")
 plt.show()
-
 """
+
+
 # 中频
 figure = plt.figure(figsize=(6,8))
 for i in range(1,8):
@@ -541,7 +543,7 @@ for i in range(1,8):
     plt.xticks(my_x_ticks)
     plt.xlim([35,235])
     plt.legend()
-
+    plt.grid(linestyle=":")
     # 调节时间：
     plt.subplot(2, 1, 2)
     # 有效数据：
@@ -556,8 +558,9 @@ for i in range(1,8):
     plt.xticks(my_x_ticks)
     plt.xlim([35,235])
     plt.legend()
+    plt.grid(linestyle=":")
 plt.show()
-"""
+
 """
 # 高频
 figure = plt.figure(figsize=(6,8))
