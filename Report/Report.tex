@@ -26,12 +26,13 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125em}}
 \begin{document}
 
-\title{Report Title: Be Descriptive}
+\title{Research on the correlation between PID controller performance and its update frequency}
+% PID控制器性能与其更新频率关系的研究
 
 \author{
-    \IEEEauthorblockN{Student Number}
+    \IEEEauthorblockN{Student Number (Zhinan Chen)}
     \and
-    \IEEEauthorblockN{Student Number}
+    \IEEEauthorblockN{2217498 (Runze Yuan)}
 }
 
 \maketitle
@@ -264,7 +265,7 @@ The overall results of the experiment are detailed in the figure in the appendix
     \textbf{Graph explanation:} Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
 % 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
         \begin{figure*}
-            \centerline{\includegraphics[width=1.1\linewidth]{Report/Pic/ResultMediumFrequency_2.png}}
+            \centerline{\includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency_2.png}}
             \caption{Medium update frequency PID performance.}
             \label{fig_MediumFrequency}
         \end{figure*}
@@ -275,7 +276,7 @@ The overall results of the experiment are detailed in the figure in the appendix
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics[width=1.05\linewidth]{Report/Pic/ResultHighFrequency.png}
+            \includegraphics[width=\linewidth]{Report/Pic/ResultHighFrequency_2.png}
             \caption{High update frequency PID performance.}
             \label{fig_HighFrequency}
         \end{figure}
@@ -371,7 +372,7 @@ From our results, we discovered:
 \end{itemize}
 
 % 结果总体上支持我们的假设，即，存在一个最优的更新频率范围，在此范围中PID控制器可以取得最佳性能。对于低频，控制器响应过于缓慢且伴随着剧烈震荡。对于高频，控制器的稳态性能差，且性能相对于中频段低。对于我们实验中的被控对象，最佳的PID控制器更新频率是40-120Hz，在这一范围内，控制器的各性能参数最优秀，且对于更新频率变化有一定鲁棒性，因为此范围内没有控制器震荡的频段。
-\textbf{The results generally support our hypothesis that there is an optimal range of update frequencies in which the PID controller can achieve the best performance.} For low frequencies, the controller response is too slow and shows violent oscillations. For high update frequencies, the steady-state performance of the controller is poor and the performance is worse than in the medium frequency range. \textbf{For the controlled object (Pololu 3pi+ 32U4 robot left wheel idle speed) in our experiments, the best PID controller update frequency is 40\bm{$\sim$}120Hz}, where the controller has the best performance and is robust to small shifts in update frequency, as there is no frequency band of controller oscillation in this range.
+\textbf{The results generally support our hypothesis that there is an optimal range of update frequencies in which the PID controller can achieve the best performance.} For low frequencies, the controller response is too slow and shows violent oscillations. For high update frequencies, the steady-state performance of the controller is poor and the performance is worse than in the medium frequency range. \textbf{For the controlled object (Pololu 3pi+ 32U4 robot left wheel idle speed) in our experiments, the best PID controller update frequency range is 40\bm{$\sim$}120Hz}, where the controller has the best performance and is robust to small shifts in update frequency, as there is no frequency band of controller oscillation in this range.
 
 We also analysed the results and observed phenomena such as: sources of robot kinematics errors at high update frequencies, poorer steady-state performance of the system at high update frequencies, trends in PID parameters with frequency, and trends in PID performance with frequency.
 
@@ -404,7 +405,7 @@ Our work also has \textbf{limitations}:
 \appendix
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix.png}}
-\caption{Overall result picture. Red dots represents oscillate.}% 遍历频率域的方法
+\caption{Overall result picture. Red dots represents oscillate. Line label is center frequency of the neighborhood.}% 遍历频率域的方法
 \label{fig_appendix}
 \end{figure}
 
