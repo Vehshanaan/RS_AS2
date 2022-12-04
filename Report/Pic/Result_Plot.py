@@ -423,7 +423,7 @@ overshoot_results = np.array(overshoot_results)
 setting_results = np.array(setting_results)
 
 
-"""
+
 # 原始大图
 figure = plt.figure()
 
@@ -448,7 +448,10 @@ for i in range(len(f_test)):
         len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
     plt.ylabel("Overshoot (%)", fontsize=20)
     plt.xlabel("PID Frequency (Hz)", fontsize=20)
+    my_x_ticks = np.array(f_test)
+    plt.xticks(my_x_ticks)
     plt.legend()
+    plt.grid(linestyle=":")
 
     # 调节时间：
     plt.subplot(2, 1, 2)
@@ -460,10 +463,13 @@ for i in range(len(f_test)):
         len(current_offset))[np.invert(setting_mask)], marker="*", color="r")
     plt.ylabel("Setting time (ms)", fontsize=20)
     plt.xlabel("PID Frequency (Hz)", fontsize=20)
+    my_x_ticks = np.array(f_test)
+    plt.xticks(my_x_ticks)
     plt.ylim([-5, 200])
     plt.legend()
+    plt.grid(linestyle=":")
 plt.show()
-"""
+
 """
 # 中频
 figure = plt.figure(figsize=(6,8))
@@ -559,9 +565,9 @@ plt.show()
 Ki = np.array([0.045, 1.20, 1.73, 2.34, 2.50, 2.63, 2.72, 2.86, 2.89, 2.92, 0.35, 0.7, 0.9, 0.9, 0.9])
 Kd = np.array([1000, 3.243, 2.52, 2.55, 2.19, 2.05, 1.97, 1.93, 1.91, 1.89, 2.9, 2.9, 2.9, 2.9, 2.9])
 
-
+""""
 # Ki变化趋势的分析：
-fig=plt.figure(figsize=[11*0.8,14*0.8])
+fig=plt.figure(figsize=[1*0.8,14*0.8])
 for i in range(len(f_test)):
     plt.subplot(2,1,1)
     plt.plot(f_test,Ki,marker="o",color="b")
@@ -590,7 +596,7 @@ for i in range(len(f_test)):
     plt.grid(linestyle=":")
 plt.show()
 
-
+"""
 
 
 
