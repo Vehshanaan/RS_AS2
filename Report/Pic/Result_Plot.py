@@ -514,7 +514,7 @@ for i in range(0,3):
     plt.grid(linestyle=":")
 plt.show()
 """
-
+"""
 
 # 中频
 figure = plt.figure(figsize=(6,8))
@@ -560,8 +560,9 @@ for i in range(1,8):
     plt.legend()
     plt.grid(linestyle=":")
 plt.show()
-
 """
+
+
 # 高频
 figure = plt.figure(figsize=(6,8))
 for i in range(7,15):
@@ -590,6 +591,7 @@ for i in range(7,15):
     plt.ylim({-0.8,32})
     plt.xlim([225,505])
     plt.legend()
+    plt.grid(linestyle=":")
 
     # 调节时间：
     plt.subplot(2, 1, 2)
@@ -605,8 +607,9 @@ for i in range(7,15):
     #plt.xticks(my_x_ticks)
     plt.xlim([225,505])
     plt.legend()
+    plt.grid(linestyle=":")
 plt.show()
-"""
+
 
 Ki = np.array([0.045, 1.20, 1.73, 2.34, 2.50, 2.63, 2.72, 2.86, 2.89, 2.92, 0.35, 0.7, 0.9, 0.9, 0.9])
 Kd = np.array([1000, 3.243, 2.52, 2.55, 2.19, 2.05, 1.97, 1.93, 1.91, 1.89, 2.9, 2.9, 2.9, 2.9, 2.9])
