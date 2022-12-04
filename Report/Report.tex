@@ -275,6 +275,17 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
        In our experiments, oscillations in the low frequency band fall into the former category, while oscillations in the high frequency band fall into the latter category. \textbf{That is, at low frequencies the controller causes the system to oscillate up and down significantly, and at high frequencies the system oscillates continuously in small ranges around  set point, and this oscillation cannot be maintained within $\pm5\%$ error.}
     \item \textbf{Trends in PID Parameters:}\\
     % 在我们为频率范围内的点调节PID参数时，我们观察到了以下特点：
+    When we tuned the PID parameters for points in the frequency range, we observed the following characteristics:
+    \begin{enumerate}
+        \item \bm{$K_{i}$}:
+        \item \bm{$K_{d}$}:
+        \begin{figure}
+            \centering
+            \includegraphics[scale=0.42]{Report/Pic/KiTrend.png}
+            \caption{Medium update frequency PID performance.}
+            \label{KiTrend}
+        \end{figure}
+    \end{enumerate}
     \item \textbf{Kinematics in High Frequency:}\\
     \item \textbf{Oscillate bands:}\\
 \end{itemize}
