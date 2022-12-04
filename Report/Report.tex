@@ -250,13 +250,33 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
     \item \textbf{High Frequency(\bm{$f=[230,500]$}):} Fig. \ref{fig_HighFrequency}.
     \\
     % 性能开始随频率的上升而下降。超调量和调节时间都开始逐渐上升。同时，此频段的震荡频段进一步增加，大多频率点都发生了震荡。但这种震荡与低频段的震荡是不同的，这种震荡更多代表的是稳态的不稳定。我们在后面详聊。
-    The performance starts to \textit{decrease} as the frequency rises. Both the overshoot and the setting time begin to rise gradually. At the same time, the oscillation band in this frequency band increases further, with oscillation occurring at most frequency points. However, this oscillation is different from the oscillation in the low frequency bands. Such oscillation represents more of a steady-state instability. We describe this in section \ref{V_Discussion and Conclusion}.
+    The performance starts to \textit{decrease} as the frequency rises. Both the overshoot and the setting time begin to rise gradually. At the same time, the oscillation band in this frequency band increases further, with oscillation occurring at most frequency points. However, this oscillation is different from the oscillation in the low frequency bands. Such oscillation represents more of a steady-state instability. We describe this in subsection \ref{BehindMetrics}.
         \begin{figure}
             \centering
             \includegraphics[width=1.05\linewidth]{Report/Pic/ResultHighFrequency.png}
             \caption{High update frequency PID performance.}
             \label{fig_HighFrequency}
         \end{figure}
+\end{itemize}
+\subsection{Behind Metrics}
+\label{BeyondMetrics}
+% 震荡
+% PID参数变化趋势
+% 高速时运动学计算比轮子旋转快的问题
+% 震荡频段
+\begin{itemize}
+    \item \textbf{Two Kinds of Oscillations:}\\
+        % 高频段的震荡和低频段的震荡是不同的。根据我们的定义：如果没能在一秒内保持连续三次稳定在If process variable failed to show three consecutive points are within $\pm5\%$ error of the final value in 1 second period, the system is considered oscillate. 但有两种情形符合这一定义：1）被控量在给定值上下大幅度震荡（一般意义上的震荡） 2）稳态性能太差，稳态误差无法维持在±5%的范围内，被判定为震荡。在我们的实验中，低频段的震荡属于前者，而高频段的震荡属于后者。即，低频时控制器使系统被控量上下大幅度震荡，高频时系统给定值的附近持续小幅度震荡，且此种震荡不能保持在±5%误差范围内。
+        \textbf{Oscillations in the high frequency band are different from oscillations in the low frequency band.} According to our definition: if the process variable fails to show three consecutive points are within $\pm5\%$ error of the set point in 1 second period, the system is considered oscillate. However, there are two cases that fit this definition:
+        \begin{enumerate}
+            \item The process variable oscillates significantly above and below the given value (oscillation in the general sense).
+            \item The steady state performance is so poor that the steady state error cannot be maintained within $\pm5\%$ and is judged to be oscillate.
+        \end{enumerate}
+       In our experiments, oscillations in the low frequency band fall into the former category, while oscillations in the high frequency band fall into the latter category. \textbf{That is, at low frequencies the controller causes the system to oscillate up and down significantly, and at high frequencies the system oscillates continuously in small ranges around  set point, and this oscillation cannot be maintained within $\pm5\%$ error.}
+    \item \textbf{Trends in PID Parameters:}\\
+    % 在我们为频率范围内的点调节PID参数时，我们观察到了以下特点：
+    \item \textbf{Kinematics in High Frequency:}\\
+    \item \textbf{Oscillate bands:}\\
 \end{itemize}
 \subsection{Summary}
 % 随着更新频率的提升，PID控制器的性能先提升后下降，这一规律也出现在使用同一组PID参数的单一邻域中。随着频率的升高，出现了若干不连续的震荡频段，频率越高震荡频段越多越长。
