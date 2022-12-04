@@ -559,10 +559,11 @@ plt.show()
 Ki = np.array([0.045, 1.20, 1.73, 2.34, 2.50, 2.63, 2.72, 2.86, 2.89, 2.92, 0.35, 0.7, 0.9, 0.9, 0.9])
 Kd = np.array([1000, 3.243, 2.52, 2.55, 2.19, 2.05, 1.97, 1.93, 1.91, 1.89, 2.9, 2.9, 2.9, 2.9, 2.9])
 
-"""
+
 # Ki变化趋势的分析：
 fig=plt.figure(figsize=[9,4])
 for i in range(len(f_test)):
+    plt.subplot(2,1,1)
     plt.plot(f_test,Ki,marker="o",color="b")
     plt.ylim([-0.1,3.0])
     plt.vlines(f_test[9],-1,10,colors="r")
@@ -571,12 +572,12 @@ for i in range(len(f_test)):
     plt.ylabel("Ki",fontsize="12")
     plt.xlabel("f (Hz)",fontsize="12")
     plt.grid(linestyle=":")
-plt.show()
-"""
+
+
 
 
 # Kd变化趋势的分析
-fig=plt.figure(figsize=[9,4])
+plt.subplot(2,1,2)
 for i in range(len(f_test)):
     plt.plot(f_test,Kd,marker="o",color="b")
     plt.ylim([1.5,3.0])
