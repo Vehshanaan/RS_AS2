@@ -423,7 +423,7 @@ overshoot_results = np.array(overshoot_results)
 setting_results = np.array(setting_results)
 
 
-
+"""
 # 原始大图
 figure = plt.figure()
 
@@ -466,6 +466,49 @@ for i in range(len(f_test)):
     my_x_ticks = np.array(f_test)
     plt.xticks(my_x_ticks)
     plt.ylim([-5, 200])
+    plt.legend()
+    plt.grid(linestyle=":")
+plt.show()
+"""
+# 低频
+figure = plt.figure(figsize=(6,8))
+for i in range(0,3):
+    # 超调
+    plt.subplot(2, 1, 1)
+
+    # 对每组offset,画出一根线，叠加在一个图里
+    current_offset = np.array(f_offsets[i])
+
+    current_overshoot = np.array(overshoot_results[i]).astype(np.double)
+    overshoot_mask = np.isfinite(current_overshoot)
+
+    current_setting = np.array(setting_results[i]).astype(np.double)
+    setting_mask = np.isfinite(current_setting)
+    # 超调：
+    # 有效数据
+    plt.plot(current_offset[overshoot_mask],
+             current_overshoot[overshoot_mask], marker="o", label=str(f_test[i]))
+    # 无效数据：
+    plt.scatter(current_offset[np.invert(overshoot_mask)], np.zeros(
+        len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
+    plt.ylabel("Overshoot (%)", fontsize=10)
+    plt.xlabel("PID Frequency (Hz)", fontsize=10)
+    plt.xlim([-2,40])
+    plt.legend()
+    plt.grid(linestyle=":")
+
+    # 调节时间：
+    plt.subplot(2, 1, 2)
+    # 有效数据：
+    plt.plot(current_offset[setting_mask],
+             current_setting[setting_mask], marker="o", label=str(f_test[i]))
+    # 无效数据：
+    plt.scatter(current_offset[np.invert(setting_mask)], np.zeros(
+        len(current_offset))[np.invert(setting_mask)], marker="*", color="r")
+    plt.ylabel("Setting time (ms)", fontsize=10)
+    plt.xlabel("PID Frequency (Hz)", fontsize=10)
+   
+    plt.xlim([-2,40])
     plt.legend()
     plt.grid(linestyle=":")
 plt.show()
