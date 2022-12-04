@@ -120,6 +120,7 @@ To test our hypothesis, we investigated the effect of PID update frequency on th
 % 
 
 \subsection{Overview of Method}
+\label{PIDTuningMethod}
 % 3.A
 % 向读者描述你的实验的一般结构和程序。你应该提供一个有点像蛋糕食谱的规格。 
 % 例如：你的实验持续多长时间？ 你使用多少次重复试验？有多少种备用方案？
@@ -258,7 +259,7 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
             \label{fig_HighFrequency}
         \end{figure}
 \end{itemize}
-\subsection{Behind Metrics}
+\subsection{Other than Metrics}
 \label{BehindMetrics}
 % 震荡
 % PID参数变化趋势
@@ -273,23 +274,27 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
             \item The steady state performance is so poor that the steady state error cannot be maintained within $\pm5\%$ and is judged to be oscillate.
         \end{enumerate}
        In our experiments, oscillations in the low frequency band fall into the former category, while oscillations in the high frequency band fall into the latter category. \textbf{That is, at low frequencies the controller causes the system to oscillate up and down significantly, and at high frequencies the system oscillates continuously in small ranges around  set point, and this oscillation cannot be maintained within $\pm5\%$ error.}
-    \item \textbf{Trends in PID Parameters:}\\
+    \item \textbf{Trends in PID Parameters: Fig. \ref{KiTrend}}\\
     % 在我们为频率范围内的点调节PID参数时，我们观察到了以下特点：
-    When we tuned the PID parameters for points in the frequency range, we observed the following characteristics:
+    When we tuned the PID parameters (see \ref{PIDTuningMethod}) for points in the frequency range, we observed the following characteristics:
     \begin{enumerate}
         % Ki: 从极低（0.045）开始，随频率上升而增加，在f=322.1处突然减小，但仍保持与频率的正相关。
         % Ki: 从极高（0.045）开始，随频率上升而增加，在f=322.1处突然减小，然后保持不变。
         \item \bm{$K_{i}$}: Starting at a very low value (0.045) and increasing with frequency, it suddenly decreases at $f = 322.1$, but still maintains a positive correlation with frequency.
-        \item \bm{$K_{d}$}: Starting at a outlier high value (1000.00) and decreasing with frequency, it suddenly increases at $f = 322.1$, and remains stable (i.e., in our test, $K_{d}$ has little influence to performance in high frequency band).
+        \item \bm{$K_{d}$}: Starting at a outlier high value (1000.00 at $f=2.00Hz$) and decreasing with frequency, it suddenly increases at $f = 322.1$, and remains stable (i.e., in our test, $K_{d}$ has little influence to performance in high frequency band).
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth]{Report/Pic/KiKdTrend.png}
+            \includegraphics[width=1.1\linewidth]{Report/Pic/KiKdTrend.png}
             \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}.}
             \label{KiTrend}
         \end{figure}
     \end{enumerate}
     \item \textbf{Kinematics in High Frequency:}\\
+    % 在高频区域，运动学计算也引入了不稳定因素。如果kinematics的更新频率高于轮轴encoder的变化频率，encoder在两次update之间的变化将被计算为0，使kinematics错误地将速度计算为0，这一问题会使f>500的区域大幅震荡，但此问题可以通过软件方法解决（如，在每次encoder count变化时更新Kinematics，而不是固定频率更新。）
+    In the high frequency range, the kinematics calculation also introduces instability. If the kinematics are updated more frequently than the axle encoder changes, the encoder count does not have time to change between two kinematics updates, causing the kinematics to incorrectly calculate the velocity as 0. This problem can cause significant oscillations in the $f>500$ range, but this problem can be solved by software methods (e.g. by updating the kinematics when encoder count changes, rather than updating kinematics at a fixed frequency.)
     \item \textbf{Oscillate bands:}\\
+    % 随着频率增长，出现了越来越多越来越长的震荡区间，在这些范围内PID控制器的性能突然变差。距离震荡区间越近，超调和调节时间越大。且震荡区间对多组PID参数均有相同影响。
+    As the frequency increases, more and more oscillation intervals of increasing length appear and the performance of the PID controller suddenly deteriorates within these ranges. The closer to the oscillation interval, the greater the overshoot and setting time. The oscillation interval has the same effect on multiple sets of PID parameters.
 \end{itemize}
 \subsection{Summary}
 % 随着更新频率的提升，PID控制器的性能先提升后下降，这一规律也出现在使用同一组PID参数的单一邻域中。随着频率的升高，出现了若干不连续的震荡频段，频率越高震荡频段越多越长。
@@ -305,12 +310,20 @@ Graph explanation: Each line in the graph represents a neighbourhood with its co
 \label{V_Discussion and Conclusion}
 % 5.
 % 通过重新陈述你的假设来开始你的讨论和结论。  你可以在这里复制和粘贴你的假设。  
-Begin your discussion and conclusion by re-stating your hypothesis.  You can literally copy-and-paste your hypothesis here.  
+Based on our understanding to PID controllers, we hypothesised that:
+%过高的频率使PID控制器控制量的变化不能及时地反映在被控对象上，而降低性能
+%过低的频率导致低速的响应，降低控制实时性，从而降低性能
+%在频率域中，应该有一个最优频段，可以较好地平衡PID的各个方面，达到较优的性能
+\begin{enumerate}
+    \item High update frequency makes the PID controller changes can not be reflected in time on the controlled object, and reduce the performance.
+    \item Low update frequency leads to a slow response speed, which affect real-time controlling and therefore controller performance.
+    \item In the frequency range, there could be an optimal frequency band that can better balance all aspects of the PID to achieve better performance.
+\end{enumerate}
+
+% 为了验证我们的想法，我们将PID控制器应用于Pololu 3pi+ 32U4 robot, 将机器人的左轮空转速度作为被控对象。根据实际应用的限制与硬件本身的限制，选取了一个频率范围，在这个频率范围内等间距选取15个点，对这些点调试了PID参数，并在这些点的基础上shift频率来观察PID控制器性能的变化。
+For the experiment implementation, we applied the PID controller to the Pololu 3pi+ 32U4 robot, using the robot's left wheel idle speed as the controlled object. A frequency range was selected based on the limitations of the application and the hardware itself. 15 points were selected at equal intervals within this frequency range, the PID parameters were tuned for these points, and we shift PID update frequency based on these points to observe the change in performance of the PID controller. We use overshoot and setting time as metrics to evaluate PID performance.
 % 下面两行是示例：
-Because the VL1680X has been identified as an active sensor with ... limitations, we hypothesised that:
-\begin{quote}
-    by applying ... filtering to the sensor, we predict a measurable improvement of the sensor under ... conditions.  
-\end{quote}
+
 % 对你的结果进行讨论--这是否支持或反驳了你的假说。 
 % 结果可能是混合的（支持和反驳），你应该在这里讨论。
 % 在你的讨论中，将此作为另一个展示/证明你的理解的机会。尽量避免陈述显而易见的事情
@@ -318,11 +331,38 @@ Because the VL1680X has been identified as an active sensor with ... limitations
 % 你的发现有什么意义？  
 
 % 记得说:大多数邻域到右边都抬头了，左边都大震荡了
-Make a discussion of what your results showed - whether this supported or refuted your hypothesis.  It may be that the results were mixed (supporting and refuting) and you should discuss that here. In your discussion, use this as another opportunity to demonstrate/evidence your understanding. Try to avoid stating the obvious - instead, use analysis/evaluation/synthesis to show that you understand \emph{how} and \emph{why} you saw the results you did.  What are the implications of your findings?  
+From our results, we discovered:
+\begin{itemize}
+    \item \textbf{For low frequency (\bm{$f=[0,40]$}):} The process value shows violent oscillation and the PID controller has the worst performance. PID performance improves with increasing update frequency. 
+    \item \textbf{For medium frequency (\bm{$f=[40,230]$}):} The PID controller performs best, with performance improving as the frequency rises, but gradually some oscillation bands emerge in which the PID controller performance suddenly deteriorates and oscillates.
+    \item \textbf{For high frequency (\bm{$f=[230,500]$}):} In this range, the performance of the PID controller decreases as the frequency rises. PID performance is better than in the low frequency range but worse than in the medium frequency range.
+\end{itemize}
+
+% 结果总体上支持我们的假设，即，存在一个最优的更新频率范围，在此范围中PID控制器可以取得最佳性能。对于低频，控制器响应过于缓慢且伴随着剧烈震荡。对于高频，控制器的稳态性能差，且性能相对于中频段低。对于我们实验中的被控对象，最佳的PID控制器更新频率是40-120Hz，在这一范围内，控制器的各性能参数最优秀，且对于更新频率变化有一定鲁棒性，因为此范围内没有控制器震荡的频段。
+\textbf{The results generally support our hypothesis that there is an optimal range of update frequencies in which the PID controller can achieve the best performance.} For low frequencies, the controller response is too slow and shows violent oscillations. For high update frequencies, the steady-state performance of the controller is poor and the performance is worse than in the medium frequency range. \textbf{For the controlled object (Pololu 3pi+ 32U4 robot left wheel idle speed) in our experiments, the best PID controller update frequency is 40\bm{$\sim$}120Hz}, where the controller has the best performance and is robust to small shifts in update frequency, as there is no frequency band of controller oscillation in this range.
+
+We also analysed the results and observed phenomena such as: sources of robot kinematics errors at high update frequencies, poorer steady-state performance of the system at high update frequencies, trends in PID parameters with frequency, and trends in PID performance with frequency.
+
+% 我们的工作也有一些局限性：
+Our work also has \textbf{limitations}:
+\begin{itemize}
+    \item Simplified control objects: we use robot left wheel idle speed as controlled object, which is clearly simplifid.
+    \item Versatility: The experimental results are only for the current controlled object and may not be generalised if the control environment changes (e.g. motor load changes).
+    \item PID parameters: The lack of precise criteria for determining PID parameters may have artificially interference with the experimental results.
+\end{itemize}
+
+\textbf{Future work:}
+\begin{itemize}
+    \item Use other objectives to run the PID controlling test, e.g. heading angle of the robot. To make the research more application relevant.
+    \item Find the precise criteria to tune the PID parameters.
+    \item Extend the experiment to a wider frequency range and take more points within the existing frequency range.
+    \item Compare optimal update frequency controller performance with performance at other frequencies.
+\end{itemize}
+
 % 这也是评估你的实验和项目整体的一个好机会。  
 % 你可能希望进一步讨论研究的局限性（例如，控制/自变量的难度，或你在项目中面临的任何问题）。 
 % 你可能希望对未来的工作提出建议--但要确保这是从你所获得的理解中获得的明确进展，而不是胡乱猜测。
-This is also a good opportunity to evaluate your experiment and project as a whole.  You may wish to further discuss the limitations of the study (e.g. the difficulty of controlled/dependent variables, or any problems you faced in your project).  You may wish to make a recommendation for future work - but ensure that this is a clear advancement from the understanding you have gained and not wild speculation.
+
 
 
 \bibliographystyle{ieeetr} 
