@@ -259,14 +259,16 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 
 % 克制自己，有的东西不该在这里讨论。而应该在v中详细介绍
 \subsection{Overview of Results}
+\label{Overview of Results}
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
 The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$}, and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
 \subsection{Result Details (Fig. \ref{fig_LowFrequency}, \ref{fig_MediumFrequency}, \ref{fig_HighFrequency}.) } 
+\label{Result Details}
     \textbf{Graph explanation:} Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
 % 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
         \begin{figure*}
             \centerline{\includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency_2.png}}
-            \caption{Medium update frequency PID performance.}
+            \caption{Medium update frequency PID performance. \protect\\ Red dots represents oscillate. Line label is center frequency of the neighborhood. Same for Fig. \ref{fig_LowFrequency}, \ref{fig_HighFrequency}. Detailed explanation see \ref{Result Details}.}
             \label{fig_MediumFrequency}
         \end{figure*}
         \begin{figure}[htbp]
@@ -405,7 +407,7 @@ Our work also has \textbf{limitations}:
 \appendix
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix.png}}
-\caption{Overall result picture. Red dots represents oscillate. Line label is center frequency of the neighborhood.}% 遍历频率域的方法
+\caption{Overall result picture.  \protect\\ Red dots represents oscillate. Line label is center frequency of the neighborhood.  Detailed explanation see \ref{Result Details}.}% 遍历频率域的方法
 \label{fig_appendix}
 \end{figure}
 
