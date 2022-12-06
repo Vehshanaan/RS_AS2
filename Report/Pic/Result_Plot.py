@@ -470,6 +470,59 @@ for i in range(len(f_test)):
     plt.grid(linestyle=":")
 plt.show()
 """
+
+#改进大图
+figure = plt.figure()
+
+for i in range(len(f_test)):
+    # 超调
+    plt.subplot(2, 1, 1)
+
+    # 对每组offset,画出一根线，叠加在一个图里
+    current_offset = np.array(f_offsets[i])
+
+    current_overshoot = np.array(overshoot_results[i]).astype(np.double)
+    overshoot_mask = np.isfinite(current_overshoot)
+
+    current_setting = np.array(setting_results[i]).astype(np.double)
+    setting_mask = np.isfinite(current_setting)
+    # 超调：
+    # 有效数据
+    plt.plot(current_offset[overshoot_mask],
+             current_overshoot[overshoot_mask], marker="o", label=str(f_test[i]))
+    # 无效数据：
+    plt.scatter(current_offset[np.invert(overshoot_mask)], np.zeros(
+        len(current_offset))[np.invert(overshoot_mask)], marker="*", color="r")
+    plt.ylabel("Overshoot (%)", fontsize=20)
+    plt.xlabel("PID Frequency (Hz)", fontsize=20)
+    my_x_ticks = np.array(range(0,501,20))
+    plt.xticks(my_x_ticks)
+    plt.ylim([-1,32])
+    plt.legend()
+    plt.grid(linestyle=":")
+    plt.vlines(40,-5,35,colors="r")
+    plt.vlines(230,-5,35,colors="r")
+    
+
+    # 调节时间：
+    plt.subplot(2, 1, 2)
+    # 有效数据：
+    plt.plot(current_offset[setting_mask],
+             current_setting[setting_mask], marker="o", label=str(f_test[i]))
+    # 无效数据：
+    plt.scatter(current_offset[np.invert(setting_mask)], np.zeros(
+        len(current_offset))[np.invert(setting_mask)], marker="*", color="r")
+    plt.ylabel("Setting time (ms)", fontsize=20)
+    plt.xlabel("PID Frequency (Hz)", fontsize=20)
+    my_x_ticks = np.array(range(0,501,20))
+    plt.xticks(my_x_ticks)
+    plt.ylim([-5, 200])
+    plt.vlines(40,-5,205,colors="r")
+    plt.vlines(230,-5,205,colors="r")
+    plt.legend()
+    plt.grid(linestyle=":")
+plt.show()
+
 """
 # 低频
 figure = plt.figure(figsize=(6,8))
@@ -561,8 +614,7 @@ for i in range(1,8):
     plt.grid(linestyle=":")
 plt.show()
 """
-
-
+'''
 # 高频
 figure = plt.figure(figsize=(6,8))
 for i in range(7,15):
@@ -609,6 +661,7 @@ for i in range(7,15):
     plt.legend()
     plt.grid(linestyle=":")
 plt.show()
+'''
 
 
 Ki = np.array([0.045, 1.20, 1.73, 2.34, 2.50, 2.63, 2.72, 2.86, 2.89, 2.92, 0.35, 0.7, 0.9, 0.9, 0.9])
