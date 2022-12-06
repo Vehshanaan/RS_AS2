@@ -144,7 +144,7 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width = \linewidth]{Report/Pic/WheelResponse_2.png}}
-\caption{Diagram of wheel speed versus PWM value.} % 轮子速度与PWM值的关系
+\caption{Diagram of wheel idle speed versus PWM value. Data in the graph is from a single test. } % 轮子速度与PWM值的关系
 \label{fig_WheelCharacter}
 \end{figure}
 
@@ -166,7 +166,7 @@ To test our hypothesis, we investigated the effect of PID update frequency on th
 % 3.A
 % 向读者描述你的实验的一般结构和程序。你应该提供一个有点像蛋糕食谱的规格。 
 % 例如：你的实验持续多长时间？ 你使用多少次重复试验？有多少种备用方案？
-The main focus of the experiment was to \textbf{keep the PID parameters constant and change the update frequency of the PID controller to observe the change in performance metrics} (overshoot, setting time). A frequency range of \textbf{2Hz $\sim$ 500Hz} was selected for testing based on the actual control requirements and hardware performance limitations (outside of this range the controller output can oscillate violently). \textbf{Using the same set of PID parameters for the entire frequency range would produce oscillations at most of the tested frequencies and produce meaningless test data}, so we adopted the following approach: 
+The main focus of the experiment was to \textbf{observe the relation of PID controller update frequency and it's performance metrics} (overshoot, setting time). The \textbf{upper limit} of the tested frequency range is 500Hz (hardware limitation), and the \textbf{lower limit} is 2Hz (based on practical controlling demand). Ideally, a unique set of PID parameters should be tuned for all frequencies in the tested range to see their best performance, but this is not practical (the tuning parameters are time consuming), so we adopted the following approach: 
 % 实验的主要内容就是保持PID参数不变，改变PID控制器的update freqeucy， 观察性能指标（overshoot, setting time）的变化。根据实际控制的需求和硬件性能的限制，我们选定2Hz~500Hz的频率范围来进行测试（在此范围外控制器输出会产生剧烈震荡）。对整个频率范围使用同一组PID参数会使大部分受试频率产生震荡，产生无意义的测试数据，因此我们采用这样的方法：
 
 % 插入系统框图
@@ -176,7 +176,7 @@ The main focus of the experiment was to \textbf{keep the PID parameters constant
 \label{fig_FrequencyRange}
 \end{figure}
 
-We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[2,500]$,  and \textbf{for each frequency we tune a set of PID parameters. Parameter tuning follows a common principle:}
+We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[2,500]Hz$,  and \textbf{for each frequency we tune a set of PID parameters. Parameter tuning follows a common principle:}
 \begin{enumerate}
     \item\textbf{ Keep \bm{$K_{p}$} constant. }We found no observable effect of frequency change on the proportional part. Probably because the proportional part of the calculation does not involve a change in time.
     \item\textbf{ Keep overshoot \bm{$\leq10\%$}. }
