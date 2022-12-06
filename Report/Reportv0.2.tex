@@ -26,12 +26,13 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125em}}
 \begin{document}
 
-\title{Report Title: Be Descriptive}
+\title{Research on the correlation between PID controller performance and update frequency}
+% PID控制器性能与其更新频率关系的研究
 
 \author{
-    \IEEEauthorblockN{Student Number}
+    \IEEEauthorblockN{2216722 (Zhinan Chen)}
     \and
-    \IEEEauthorblockN{Student Number}
+    \IEEEauthorblockN{2217498 (Runze Yuan)}
 }
 
 \maketitle
@@ -41,17 +42,17 @@
 %首先，尽量简明扼要地说明所调查的问题/疑问/挑战。  
 %第二，说明你发现了什么。  摘要应该帮助读者决定他们是否有兴趣阅读整篇论文。  
 % 本文基于Pololu 3pi+ 32U4 robot研究了PID控制器性能与其update frequency的关系。我们在2-500的频率范围内进行了多次实验，总结了变化的规律，最终发现高频和低频都会使PId的控制性能降低，对于实验中的被控对象，40-120是性能最佳的频率范围。
-In this paper we investigated the relationship between PID controller performance and its update frequency based on the Pololu 3pi+ 32U4 robot. We conducted several experiments in the frequency range of 2\bm{$\sim$}500 and summarised the pattern, eventually finding that both high and low frequencies degrade the control performance of the PID controller, and that 40\bm{$\sim$}120 is the best frequency range for the performance of the object being controlled in the experiments.
+In this paper we investigated the relationship between PID controller performance and its update frequency based on the Pololu 3pi+ 32U4 robot. We conducted several experiments in the frequency range of 2\bm{$\sim$}500Hz and summarised the pattern, eventually finding that both high and low frequencies degrade the control performance of the PID controller, and that 40\bm{$\sim$}120 Hz is the best frequency range for the performance of the object being controlled in the experiments.
 \end{abstract}
 
 
 \section{Introduction}
 \label{Introduction}
-Proportional-integral-derivative (PID) control is the most commonly used control algorithm in the industry and has become universally accepted in industrial control\cite{knospe2006pid}. For autonomous robotic systems that can travel, 
+Proportional-integral-derivative (PID) control is a popular control algorithm in the industry and has become universally accepted in industrial control\cite{knospe2006pid}. For autonomous robotic systems that can travel, 
 % 对于任何需要追踪给定量的控制系统来说，PID都是非常重要的算法。通过PID算法，可以在没有系统精细数学模型的情况下，完成系统的无静差控制量追踪。所以，PID控制器的性能与参数的关系是一个实用且重要的研究方向。
-PID is a important algorithm for any control system that needs to track a given amount of quantity. With the PID algorithm, it is possible to accomplish steady-state error free target tracking of a system without a fine-grained mathematical model of the system. Therefore, the performance of PID controllers in relation to parameters is an important research area and has strong integration with practical applications.
+PID is a important algorithm for control systems that needs to track a given amount of quantity. With the PID algorithm, it is possible to accomplish steady-state error free target tracking of a system without a fine-grained mathematical model of the system. Therefore, the performance of PID controllers in relation to parameters is an important research area and has strong integration with practical applications.
 % PID控制的运算中包含时间变化，所以PID控制器的性能会受到其更新频率的影响。
-PID control algorithm include time variation, so the performance of the PID controller is affected by its update frequency. Update frequency is a hidden parameter for PID controller other than the well-known $K_{p}$, $K_{i}$, and $K_{d}$. 
+PID control algorithm include time variation, so the performance of the PID controller is affected by its update frequency (the frequency of a controller updates its output according to the error value). Update frequency is a hidden parameter for PID controller other than the well-known $K_{p}$, $K_{i}$, and $K_{d}$. 
  If an optimum frequency range is found to improve the PID performance, this will provide a reference for future commissioning of other control systems to obtain better performance.
 
 A typical PID step response\cite{goodwin2001control} is shown in Fig. \ref{PIDandSettlingTime}. The blue line in the figure shows the process of a PID controller tracking the target. % PID控制器的任务就是使蓝色线条（被控量）在一定时间内达到target值。对于这个控制过程，还有一些常见的性能衡量指标，如图中所示的overshoot，setting time等。我们会在23两节详细解释这部分内容。
@@ -66,21 +67,22 @@ The task of the PID controller is to make the blue line (the controlled value) r
 \subsection{Hypothesis Statement}
 % 我们的假设可以归纳为以下三句话：
 Our hypothesis can be summarised as follows:
-\begin{enumerate}
-    \item High update frequency makes the PID controller changes can not be reflected in time on the controlled object, and reduce the performance.
+\begin{itemize}
+    \item High update frequency causes the PID controller make changes that cannot be reflected in time on the controlled object, and reduce the performance.
     \item Low update frequency leads to a slow response speed\cite{knospe2006pid}, which affect real-time controlling and therefore controller performance.
-    \item In the frequency range, there could be an optimal frequency band that can better balance all aspects of the PID to achieve better performance.
-\end{enumerate}
+\end{itemize}
+
+Based on the above assumptions, \textbf{we hypothesize that}: In the frequency range, \textbf{there could be an optimal frequency range} that can better balance all aspects of the PID to achieve better performance.
+
 
 To investigate our hypothesis, we implemented a basic PID controller based on Pololu 3pi+ 32U4 robot, designed a set of experiments, and \textbf{tested the relationship between the PID controller update frequency and it's performance}.
 \subsection{Report Structure}
 \begin{enumerate}
-    \\\textbf{\ref{Introduction}. Introduction:} A brief introduction to our research topic and our hypothesis.
+    \textbf{\ref{Introduction}. Introduction:} A brief introduction to our research topic and our hypothesis.
     \\\textbf{\ref{Implementation}. Implementation:} Introduction to the hardware system and control algorithms used for the experiments.
     \\\textbf{\ref{Experiment Methodology}. Experiment Methodology:} Details of the experiment procedures, the flow of the automatic experiment program, the variables involved in the experiments, and the metrics for performance evaluation.
     \\\textbf{\ref{Results}. Results:} The results observed in our experiment, from both the metrics and behind the metrics.
     \\\textbf{\ref{V_Discussion and Conclusion}. Discussion and Conclusion:} The significance of the experimental results for our hypothesis, the existing shortcomings in the experiment, and the direction of future work.
-    
 \end{enumerate}
 
 
@@ -121,14 +123,24 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
         \end{equation}
         $u(t)$:PID controller output
         \par
-    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to drive the wheels. The relationship between wheel speed and PWM duty cycle is shown in Fig. \ref{fig_WheelCharacter}.
+    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to drive the wheels. The relationship between wheel idle speed and PWM duty cycle is shown in Fig. \ref{fig_WheelCharacter}.
     %插入电机速度与输入的特性图 %
     % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
-    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. It also means that there is some error in the velocity calculations (it is no exact code count for one whole lap), but the velocity error has no effect on the experiments in this paper, for we are looking at relationships rather than specific values.
+    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. In this paper we use encoder count per millisecond as unit of wheel speed.
     % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
-    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the encoder value with the circumference of the wheel in order to calculate the robot kinematics. In this paper only the wheel speed part of the kinematics is needed.
-
+    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the wheel shaft encoder value. In this paper only the wheel speed part of the kinematics is needed.
 \end{itemize}
+
+\begin{algorithm}
+	\caption{Kinematics Calculation for Wheel Speed}\label{KinematicsAlgorithm}
+	\begin{algorithmic}[1]
+        \State This calculation function is called when the external update timer times out.
+        \State Calculate the difference between the current value and the historical value of the wheel encoder $\Delta code$.
+        \State Calculate the difference between the current time (ms) and the historical time (ms) $\Delta t_{ms}$.
+        \State Update historical value record for time and encoder count.
+        \State Calculate current wheel speed $V = \Delta code / \Delta t_{ms}$.
+	\end{algorithmic} 
+\end{algorithm}
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width = \linewidth]{Report/Pic/WheelResponse.png}}
@@ -258,15 +270,16 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 
 % 克制自己，有的东西不该在这里讨论。而应该在v中详细介绍
 \subsection{Overview of Results}
+\label{Overview of Results}
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
 The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$}, and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
 \subsection{Result Details (Fig. \ref{fig_LowFrequency}, \ref{fig_MediumFrequency}, \ref{fig_HighFrequency}.) } 
+\label{Result Details}
     \textbf{Graph explanation:} Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
 % 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
         \begin{figure*}
-            \centering
-            \includegraphics[width=0.8\linewidth]{Report/Pic/ResultMediumFrequency_2.png}
-            \caption{Medium update frequency PID performance.}
+            \centerline{\includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency_2.png}}
+            \caption{Medium update frequency PID performance. \protect\\ Red dots represents oscillate. Line label is center frequency of the neighborhood. Same for Fig. \ref{fig_LowFrequency}, \ref{fig_HighFrequency}. Detailed explanation see \ref{Result Details}.}
             \label{fig_MediumFrequency}
         \end{figure*}
         \begin{figure}[htbp]
@@ -276,7 +289,7 @@ The overall results of the experiment are detailed in the figure in the appendix
         \end{figure}
         \begin{figure}
             \centering
-            \includegraphics[width=1.05\linewidth]{Report/Pic/ResultHighFrequency.png}
+            \includegraphics[width=\linewidth]{Report/Pic/ResultHighFrequency_2.png}
             \caption{High update frequency PID performance.}
             \label{fig_HighFrequency}
         \end{figure}
@@ -372,7 +385,7 @@ From our results, we discovered:
 \end{itemize}
 
 % 结果总体上支持我们的假设，即，存在一个最优的更新频率范围，在此范围中PID控制器可以取得最佳性能。对于低频，控制器响应过于缓慢且伴随着剧烈震荡。对于高频，控制器的稳态性能差，且性能相对于中频段低。对于我们实验中的被控对象，最佳的PID控制器更新频率是40-120Hz，在这一范围内，控制器的各性能参数最优秀，且对于更新频率变化有一定鲁棒性，因为此范围内没有控制器震荡的频段。
-\textbf{The results generally support our hypothesis that there is an optimal range of update frequencies in which the PID controller can achieve the best performance.} For low frequencies, the controller response is too slow and shows violent oscillations. For high update frequencies, the steady-state performance of the controller is poor and the performance is worse than in the medium frequency range. \textbf{For the controlled object (Pololu 3pi+ 32U4 robot left wheel idle speed) in our experiments, the best PID controller update frequency is 40\bm{$\sim$}120Hz}, where the controller has the best performance and is robust to small shifts in update frequency, as there is no frequency band of controller oscillation in this range.
+\textbf{The results generally support our hypothesis that there is an optimal range of update frequencies in which the PID controller can achieve the best performance.} For low frequencies, the controller response is too slow and shows violent oscillations. For high update frequencies, the steady-state performance of the controller is poor and the performance is worse than in the medium frequency range. \textbf{For the controlled object (Pololu 3pi+ 32U4 robot left wheel idle speed) in our experiments, the best PID controller update frequency range is 40\bm{$\sim$}120Hz}, where the controller has the best performance and is robust to small shifts in update frequency, as there is no frequency band of controller oscillation in this range.
 
 We also analysed the results and observed phenomena such as: sources of robot kinematics errors at high update frequencies, poorer steady-state performance of the system at high update frequencies, trends in PID parameters with frequency, and trends in PID performance with frequency.
 
@@ -405,7 +418,7 @@ Our work also has \textbf{limitations}:
 \appendix
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix.png}}
-\caption{Overall result picture. Red dots represents oscillate.}% 遍历频率域的方法
+\caption{Overall result picture.  \protect\\ Red dots represents oscillate. Line label is center frequency of the neighborhood.  Detailed explanation see \ref{Result Details}.}% 遍历频率域的方法
 \label{fig_appendix}
 \end{figure}
 
