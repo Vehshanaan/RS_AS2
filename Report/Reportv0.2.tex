@@ -187,7 +187,7 @@ We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[
 % 对于f1-15中的每一个频率，我们都在其邻域中测试此频率所对应的PID参数的性能。取当前频率的前一个与后一个频率作为邻域的上下限（若没有前一个或后一个，则用自己代替）。在邻域中取十个等间距点，测试PID控制器的性能。
 
 For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood with the PID parameter tuned for $f_{i}$. The previous frequency ($f_{i-1}$) and next frequency ($f_{i+1}$) to the current frequency are taken as the upper and lower limits of the neighbourhood $[f_{i-1}, f_{i+1}]$. The exception to this rule was for the end frequencies $f_{1} = 2Hz$, $f_{15} = 50Hz$. In this case, we use $[f_{1}, f_{2}]$ as neighborhood of $f_{1}$, and $[f_{14}, f_{15}]$ as neighborhood of $f_{15}$. We visualised this rule in Fig.\ref{fig_FrequencyRange}.\\ 
-10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller.
+Then, 10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller. Test Process as shown in Algorithm. \ref{TestMethod}.
 
 \begin{algorithm}
 	\caption{Test Process}\label{TestMethod}
@@ -199,7 +199,7 @@ For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller per
                 \State In 4: if $i-1<0$ or $i+1>15$, use $f_{i}$ instead
 			\For {$f_{n}= f_{n1},f_{n2},\ldots,f_{n10}$}
 				\State Use step signal as left wheel speed set point
-                \State Measure PID performance with step response
+                \State Measure PID performance with step response, reset PID controller history memories when step signal is at low (0).
                 \State Calculate the \textbf{mean} overshoot and setting time of \textbf{10 responses}
                 \If{Controller failed to reach steady-state within \textbf{1 second}} Return a NaN value which represents system oscillate        
                 \EndIf
@@ -209,10 +209,8 @@ For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller per
 \end{algorithm}
 
 % 整个实验除PID参数为预先调节并储存好以外，均为自动进行。最大程度减少了人为干预。
- \textbf{The entire experiment is carried out automatically,} except for the PID parameters, which are pre-adjusted and stored. \textbf{Human intervention is minimised. The code we use has been shared on GitHub.} 
+ \textbf{The entire experiment is carried out automatically,} except for the PID parameters, which are pre-adjusted and stored. \textbf{Human intervention is minimised. The code we use has been shared on GitHub.} Detail of experiment see Algorithm \ref{TestMethod} and GitHub codes. 
  
-% 我们使用邻域来进行测试，是为了在保证PID控制器稳定（来获得有意义的结果）的同时，展示不同频段上频率变化对PID控制器性能的影响。
-We use neighbourhoods to perform the test in order to demonstrate the effect of frequency variations on the performance of the PID controller over different frequency ranges while ensuring that the PID controller is stable (to obtain meaningful results).
 
 \subsection{Discussion of Variables}
 \label{DiscussionOfVariables}
@@ -272,36 +270,25 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 % 克制自己，有的东西不该在这里讨论。而应该在v中详细介绍
 \subsection{Overview of Results}
 \label{Overview of Results}
+\begin{figure*}[htbp]
+\centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix_3.png}}
+\caption{Overall result picture. Red dots represents oscillate. Line label is center frequency of the neighborhood.  Detailed explanation see \ref{Result Details}.}% 遍历频率域的方法
+\label{fig_appendix}
+\end{figure*}
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
 The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$}, and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
-\subsection{Result Details (Fig. \ref{fig_LowFrequency}, \ref{fig_MediumFrequency}, \ref{fig_HighFrequency}.) } 
+\subsection{Result Details (Fig. \ref{fig_appendix}.) } 
 \label{Result Details}
     \textbf{Graph explanation:} Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
 % 图中的每条线代表一个邻域与其对应的PID参数在不同频率下展现的PID性能。底部的红点代表在此处被控量震荡而不能达到稳态。
-        \begin{figure*}
-            \centerline{\includegraphics[width=1.2\linewidth]{Report/Pic/ResultMediumFrequency_2.png}}
-            \caption{Medium update frequency PID performance. \protect\\ Red dots represents oscillate. Line label is center frequency of the neighborhood. Same for Fig. \ref{fig_LowFrequency}, \ref{fig_HighFrequency}. Detailed explanation see \ref{Result Details}.}
-            \label{fig_MediumFrequency}
-        \end{figure*}
-        \begin{figure}[htbp]
-        \centerline{\includegraphics[width=\linewidth]{Report/Pic/ResultLowFrequency_2.png}}
-        \caption{Low update frequency PID performance.}
-        \label{fig_LowFrequency}
-        \end{figure}
-        \begin{figure}
-            \centering
-            \includegraphics[width=\linewidth]{Report/Pic/ResultHighFrequency_2.png}
-            \caption{High update frequency PID performance.}
-            \label{fig_HighFrequency}
-        \end{figure}
 \begin{itemize}
-    \item \textbf{Low Frequency(\bm{$f=[0,40]$}):} Fig. \ref{fig_LowFrequency}.
+    \item \textbf{Low Frequency(\bm{$f=[0,40]$}):}
         %超调和调节时间最大。其中，调节时间明显比其他频段更长。随着频率上升，系统的调节时间和超调展现出逐渐减小的趋势。图右侧的四个红点是2邻域最右侧点发生震荡，左侧的两个红点是37.57邻域的最左侧两个点发生震荡。 
         \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the graph are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the two red dots on the left side are the leftmost two points of the $f=37.57$ neighbourhood where oscillation occurs. 
-    \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} Fig. \ref{fig_MediumFrequency}.
+    \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
         %PID控制器在此频段中性能最好。有最低的超调和调节时间。性能仍然随频率上升而改善。注意，随着频率上升，开始出现一些离散的易震荡频段，在这些频段中PID控制器突然变得非常容易震荡。这样的易震荡频段随频率上升而增多。图中所有的离群点都是位于震荡频段边缘的点。
         \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. \textbf{All the outliers in the graph are points at the edges of the oscillatory bands.}
-    \item \textbf{High Frequency(\bm{$f=[230,500]$}):} Fig. \ref{fig_HighFrequency}.
+    \item \textbf{High Frequency(\bm{$f=[230,500]$}):} 
     \\
     % 性能开始随频率的上升而下降。超调量和调节时间都开始逐渐上升。同时，此频段的震荡频段进一步增加，大多频率点都发生了震荡。但这种震荡与低频段的震荡是不同的，这种震荡更多代表的是稳态的不稳定。我们在后面详聊。
     The performance starts to \textit{decrease} as the frequency rises. Both the overshoot and the setting time begin to rise gradually. At the same time, the oscillation band in this frequency band increases further, with oscillation occurring at most frequency points. However, this oscillation is different from the oscillation in the low frequency bands. Such oscillation represents more of a steady-state instability. We describe this in subsection \ref{BehindMetrics}.
@@ -417,10 +404,6 @@ Our work also has \textbf{limitations}:
 \newpage
 \onecolumn
 \appendix
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix.png}}
-\caption{Overall result picture.  \protect\\ Red dots represents oscillate. Line label is center frequency of the neighborhood.  Detailed explanation see \ref{Result Details}.}% 遍历频率域的方法
-\label{fig_appendix}
-\end{figure}
+
 
 \end{document}
