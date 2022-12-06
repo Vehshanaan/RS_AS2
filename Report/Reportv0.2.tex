@@ -128,7 +128,7 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
     % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
     \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. In this paper we use encoder count per millisecond as unit of wheel speed.
     % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
-    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the wheel shaft encoder value. In this paper only the wheel speed part of the kinematics is needed.
+    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the wheel shaft encoder value. In this paper only the wheel speed part of the kinematics is needed. See Algorithm \ref{KinematicsAlgorithm} for details of kinematics implementation.
 \end{itemize}
 
 \begin{algorithm}
