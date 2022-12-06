@@ -209,7 +209,7 @@ Then, 10 equally spaced points in the neighbourhood are taken to test the perfor
 \end{algorithm}
 
 % 整个实验除PID参数为预先调节并储存好以外，均为自动进行。最大程度减少了人为干预。
- \textbf{The entire experiment is carried out automatically,} except for the PID parameters, which are pre-adjusted and stored. \textbf{Human intervention is minimised. The code we use has been shared on GitHub.} Detail of experiment see Algorithm \ref{TestMethod} and GitHub codes. 
+ \textbf{The entire experiment is carried out automatically,} except for the PID parameters, which are pre-adjusted and stored. \textbf{Human intervention is minimised. The code we use has been shared on GitHub\cite{Yuan_RS_AS2_2022}.} Detail of experiment see Algorithm \ref{TestMethod} and GitHub codes. 
  
 
 \subsection{Discussion of Variables}
@@ -300,12 +300,12 @@ The overall results of the experiment are detailed in the figure in the appendix
 % 高速时运动学计算比轮子旋转快的问题
 % 震荡频段
 \begin{itemize}
-    \item \textbf{Two Kinds of Oscillations:}\\
+    \item \textbf{Two Kinds of Oscillations:} Fig. \ref{OscillateExample}\\
      \begin{figure}
             \centering
-            \includegraphics[width=1.1\linewidth]{Report/Pic/Osc.png}
-            \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}.}
-            \label{KiTrend}
+            \includegraphics[width=\linewidth]{Report/Pic/OscillateExample.png}
+            \caption{Examples of different oscillate scenario. Red line marked at set point value (1.0), and for 2), dotted line marked the 5\% error range. These figures are for example only, not real data.}
+            \label{OscillateExample}
         \end{figure}
         % 高频段的震荡和低频段的震荡是不同的。根据我们的定义：如果没能在一秒内保持连续三次稳定在If process variable failed to show three consecutive points are within $\pm5\%$ error of the final value in 1 second period, the system is considered oscillate. 但有两种情形符合这一定义：1）被控量在给定值上下大幅度震荡（一般意义上的震荡） 2）稳态性能太差，稳态误差无法维持在±5%的范围内，被判定为震荡。在我们的实验中，低频段的震荡属于前者，而高频段的震荡属于后者。即，低频时控制器使系统被控量上下大幅度震荡，高频时系统给定值的附近持续小幅度震荡，且此种震荡不能保持在±5%误差范围内。
         \textbf{Oscillations in the high frequency band are different from oscillations in the low frequency band.} According to our definition: if the process variable fails to show three consecutive points are within $\pm5\%$ error of the set point in 1 second period, the system is considered oscillate. However, there are two cases that fit this definition:
@@ -313,23 +313,24 @@ The overall results of the experiment are detailed in the figure in the appendix
             \item The process variable oscillates significantly above and below the given value (oscillation in the general sense).
             \item The steady state performance is so poor that the steady state error cannot be maintained within $\pm5\%$ and is judged to be oscillate.
         \end{enumerate}
-       In our experiments, oscillations in the low frequency band fall into the former category, while oscillations in the high frequency band fall into the latter category. \textbf{That is, at low frequencies the controller causes the system to oscillate up and down significantly, and at high frequencies the system oscillates continuously in small ranges around  set point, and this oscillation cannot be maintained within $\pm5\%$ error.}
+       In our experiments, oscillations in the low frequency band fall into the former category, while oscillations in the high frequency band fall into the latter category. That is, at low frequencies the controller causes the system to oscillate up and down significantly, and at high frequencies the system oscillates continuously in small ranges around  set point, and this oscillation cannot be maintained within $\pm5\%$ error.
     \item \textbf{Trends in PID Parameters: Fig. \ref{KiTrend}}\\
     % 在我们为频率范围内的点调节PID参数时，我们观察到了以下特点：
     When we tuned the PID parameters (see \ref{PIDTuningMethod}) for points in the frequency range, we observed the following characteristics:
     \begin{enumerate}
         % Ki: 从极低（0.045）开始，随频率上升而增加，在f=322.1处突然减小，但仍保持与频率的正相关。
         % Ki: 从极高（0.045）开始，随频率上升而增加，在f=322.1处突然减小，然后保持不变。
-        \item \bm{$K_{i}$}: Starting at a very low value (0.045) and increasing with frequency, it suddenly decreases at $f = 322.1$, but still maintains a positive correlation with frequency.
-        \item \bm{$K_{d}$}: Starting at a outlier high value (1000.00 at $f=2.00Hz$) and decreasing with frequency, it suddenly increases at $f = 322.1$, and remains stable (i.e., in our test, $K_{d}$ has little influence to performance in high frequency band).
+        \item \bm{$K_{i}$}: Starting at a very low value (0.045) and increasing with frequency, it suddenly decreases at $f = 322.1Hz$, but still maintains a positive correlation with frequency.
+        \item \bm{$K_{d}$}: Starting at a outlier high value (1000.00 at $f=2.00Hz$) and decreasing with frequency, it suddenly increases at $f = 322.1Hz$, and remains stable (i.e., in our test, $K_{d}$ has little influence to performance in high frequency band).
+    \end{enumerate}
+    Note that  $f = 322.1Hz$ is the 10th of 15 equidistant points in the frequency range $2\sim500Hz$, and we found this trend when adjusting the PID parameters. So $f = 322.1Hz$ is not the accurate turning point.
         \begin{figure}
             \centering
             \includegraphics[width=1.1\linewidth]{Report/Pic/KiKdTrend.png}
-            \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}.}
+            \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}, which is the 10th of 15 equidistant points in the frequency range 2$\sim$500Hz, and we found this trend when adjusting the PID parameters.}
             \label{KiTrend}
         \end{figure}
-    \end{enumerate}
-    \item \textbf{Kinematics in High Frequency:}\\
+    \item \textbf{Kinematics in High Frequency:} Algorithm \ref{KinematicsAlgorithm} in \ref{Implementation}\\
     % 在高频区域，运动学计算也引入了不稳定因素。如果kinematics的更新频率高于轮轴encoder的变化频率，encoder在两次update之间的变化将被计算为0，使kinematics错误地将速度计算为0，这一问题会使f>500的区域大幅震荡，但此问题可以通过软件方法解决（如，在每次encoder count变化时更新Kinematics，而不是固定频率更新。）
     In the high frequency range, the kinematics calculation also introduces instability. If the kinematics are updated more frequently than the axle encoder changes, the encoder count does not have time to change between two kinematics updates, causing the kinematics to incorrectly calculate the velocity as 0. This problem can cause significant oscillations in the $f>500$ range, but this problem can be solved by software methods (e.g. by updating the kinematics when encoder count changes, rather than updating kinematics at a fixed frequency.)
     \item \textbf{Oscillate bands:}\\
@@ -388,7 +389,7 @@ Our work also has \textbf{limitations}:
 \begin{itemize}
     \item Simplified control objects: we use robot left wheel idle speed as controlled object and step signal as controlling target, which is clearly simplified for research.
     \item Versatility: The experimental results are only for the current controlled object and may not be generalised if the control environment changes (e.g. motor load changes).
-    \item PID parameters: The lack of precise criteria for determining PID parameters may have artificially interference with the experimental results.
+    \item PID parameters: PID parameters was human tuned follow a set of rules to achieve performance, so artificial interference is introduced.
 \end{itemize}
 
 \textbf{Future work:}
