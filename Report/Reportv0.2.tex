@@ -272,7 +272,7 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 \label{Overview of Results}
 \begin{figure*}[htbp]
 \centerline{\includegraphics[width=1.3\linewidth]{Report/Pic/Appendix_3.png}}
-\caption{Overall result picture. Red dots represents oscillate. Line label is center frequency of the neighborhood.  Detailed explanation see \ref{Result Details}.}% 遍历频率域的方法
+\caption{Overall result picture. Red dots represents oscillate. Line label is center frequency of the neighborhood. Red vertical lines at f = 40, 230 marked three frequency range. All the outliers in the graph are points at the edges of the oscillatory bands. Detailed explanation see \ref{Result Details}. }
 \label{fig_appendix}
 \end{figure*}
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
@@ -284,7 +284,7 @@ The overall results of the experiment are detailed in the figure in the appendix
 \begin{itemize}
     \item \textbf{Low Frequency(\bm{$f=[0,40]$}):}
         %超调和调节时间最大。其中，调节时间明显比其他频段更长。随着频率上升，系统的调节时间和超调展现出逐渐减小的趋势。图右侧的四个红点是2邻域最右侧点发生震荡，左侧的两个红点是37.57邻域的最左侧两个点发生震荡。 
-        \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the graph are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the two red dots on the left side are the leftmost two points of the $f=37.57$ neighbourhood where oscillation occurs. 
+        \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the range are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the red dot on the left side are the leftmost points of the $f=37.57$ neighbourhood where oscillation occurs. 
     \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
         %PID控制器在此频段中性能最好。有最低的超调和调节时间。性能仍然随频率上升而改善。注意，随着频率上升，开始出现一些离散的易震荡频段，在这些频段中PID控制器突然变得非常容易震荡。这样的易震荡频段随频率上升而增多。图中所有的离群点都是位于震荡频段边缘的点。
         \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. \textbf{All the outliers in the graph are points at the edges of the oscillatory bands.}
@@ -301,6 +301,12 @@ The overall results of the experiment are detailed in the figure in the appendix
 % 震荡频段
 \begin{itemize}
     \item \textbf{Two Kinds of Oscillations:}\\
+     \begin{figure}
+            \centering
+            \includegraphics[width=1.1\linewidth]{Report/Pic/Osc.png}
+            \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}.}
+            \label{KiTrend}
+        \end{figure}
         % 高频段的震荡和低频段的震荡是不同的。根据我们的定义：如果没能在一秒内保持连续三次稳定在If process variable failed to show three consecutive points are within $\pm5\%$ error of the final value in 1 second period, the system is considered oscillate. 但有两种情形符合这一定义：1）被控量在给定值上下大幅度震荡（一般意义上的震荡） 2）稳态性能太差，稳态误差无法维持在±5%的范围内，被判定为震荡。在我们的实验中，低频段的震荡属于前者，而高频段的震荡属于后者。即，低频时控制器使系统被控量上下大幅度震荡，高频时系统给定值的附近持续小幅度震荡，且此种震荡不能保持在±5%误差范围内。
         \textbf{Oscillations in the high frequency band are different from oscillations in the low frequency band.} According to our definition: if the process variable fails to show three consecutive points are within $\pm5\%$ error of the set point in 1 second period, the system is considered oscillate. However, there are two cases that fit this definition:
         \begin{enumerate}
@@ -401,9 +407,6 @@ Our work also has \textbf{limitations}:
 \bibliographystyle{ieeetr} 
 \bibliography{biblio}
 
-\newpage
-\onecolumn
-\appendix
 
 
 \end{document}
