@@ -123,10 +123,10 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
         \end{equation}
         $u(t)$:PID controller output
         \par
-    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255(integer) as input and output 0$\sim$5V power to drive the wheels. The relationship between wheel idle speed and PWM duty cycle is shown in Fig. \ref{fig_WheelCharacter}.
+    \item\textbf{Wheel and Motor Driver: }For Pololu 3pi+ 32U4 robot, user could control the motor speed by controlling motor PWM duty cycle ratio. Motor takes 0$\sim$255 (integer) as input and output 0$\sim$5V power to drive the wheels. The relationship between wheel idle speed and PWM duty cycle is shown in Fig. \ref{fig_WheelCharacter}.
     %插入电机速度与输入的特性图 %
     % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
-    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. In this paper we use encoder count per millisecond as unit of wheel speed.
+    \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. In this paper we use encoder count per millisecond as unit of wheel speed to avoid errors in speed calculation with metric units (e.g. meter), because the encoder count is unknown for a full spin.
     % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
     \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the wheel shaft encoder value. In this paper only the wheel speed part of the kinematics is needed. See Algorithm \ref{KinematicsAlgorithm} for details of kinematics implementation.
 \end{itemize}
@@ -166,7 +166,7 @@ To test our hypothesis, we investigated the effect of PID update frequency on th
 % 3.A
 % 向读者描述你的实验的一般结构和程序。你应该提供一个有点像蛋糕食谱的规格。 
 % 例如：你的实验持续多长时间？ 你使用多少次重复试验？有多少种备用方案？
-The main focus of the experiment was to \textbf{observe the relation of PID controller update frequency and it's performance metrics} (overshoot, setting time). The \textbf{upper limit} of the tested frequency range is 500Hz (hardware limitation), and the \textbf{lower limit} is 2Hz (based on practical demand of real-time controlling). Ideally, a unique set of PID parameters should be tuned for all frequencies in the tested range to see their best performance, but this is not practical (the tuning parameters are time consuming), so we adopted the following approach: 
+The main focus of the experiment was to \textbf{observe the relation of PID controller update frequency and it's performance metrics} (overshoot, setting time). The \textbf{upper limit} of the tested frequency range is 500Hz (hardware limitation), and the \textbf{lower limit} is 2Hz (based on practical demand of real-time controlling). Ideally, a unique set of PID parameters should be tuned for all frequencies in the tested range to see their best performance, but it is not practical (tuning parameters are time consuming), so we adopted the following approach: 
 % 实验的主要内容就是保持PID参数不变，改变PID控制器的update freqeucy， 观察性能指标（overshoot, setting time）的变化。根据实际控制的需求和硬件性能的限制，我们选定2Hz~500Hz的频率范围来进行测试（在此范围外控制器输出会产生剧烈震荡）。对整个频率范围使用同一组PID参数会使大部分受试频率产生震荡，产生无意义的测试数据，因此我们采用这样的方法：
 
 % 插入系统框图
@@ -186,7 +186,8 @@ We select 15 frequencies ($f_{1}\sim f_{15}$) at equal distances in the range $[
 %接下来解释算法
 % 对于f1-15中的每一个频率，我们都在其邻域中测试此频率所对应的PID参数的性能。取当前频率的前一个与后一个频率作为邻域的上下限（若没有前一个或后一个，则用自己代替）。在邻域中取十个等间距点，测试PID控制器的性能。
 
-For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood with the PID parameter tuned for $f_{i}$. The previous frequency ($f_{i-1}$) and next frequency ($f_{i+1}$) to the current frequency are taken as the upper and lower limits of the neighbourhood $[f_{i-1}, f_{i+1}]$. The exception to this rule was for the end frequencies $f_{1} = 2Hz$, $f_{15} = 50Hz$. In this case, we use $[f_{1}, f_{2}]$ as neighborhood of $f_{1}$, and $[f_{14}, f_{15}]$ as neighborhood of $f_{15}$. We visualised this rule in Fig.\ref{fig_FrequencyRange}.\\ 
+For each frequency $f_{i}$ in $f_{1}\sim f_{15}$, we test the PID controller performance in its neighbourhood with the PID parameter tuned for $f_{i}$. The previous frequency ($f_{i-1}$) and next frequency ($f_{i+1}$) to the current frequency ($f_{i}$) are taken as the upper and lower limits of the neighbourhood $[f_{i-1}, f_{i+1}]$. The exception to this rule was for the end frequencies $f_{1} = 2Hz$, $f_{15} = 50Hz$. In this case, we use $[f_{1}, f_{2}]$ as neighborhood for $f_{1}$, and $[f_{14}, f_{15}]$ as neighborhood for $f_{15}$. We visualised this rule in Fig.\ref{fig_FrequencyRange}.
+
 Then, 10 equally spaced points in the neighbourhood are taken to test the performance of the PID controller. Test Process as shown in Algorithm. \ref{TestMethod}.
 
 \begin{algorithm}
@@ -223,20 +224,20 @@ Variables in this experiment are: \bm{$K_{p}$}, \bm{$K_{i}$}, \bm{$K_{d}$}, PID 
     \item \textbf{Controlled Variables}: 
         \begin{itemize}
             \item Robot related variables: We use new battery for tests, also flip robot over during the whole test, make sure it's left wheel is free to spin and not blocked.
-            \item PID parameter \bm{$K_{p}$}: We use the same $K_{p}$ during the whole test, for we didn't find observable difference in PID proportion part.
-            \item Left wheel speed set point \bm{$v$}: We set it 1.00(encoder count/ms) as the given aim for PID controller.
+            \item PID parameter \bm{$K_{p}$}: We use the same $K_{p}$ during the whole test, for optimal proportional constant did not seem to vary with frequency.
+            \item Left wheel speed set point \bm{$v$}: We set it 1.00(encoder count/ms) as the given target for PID controller.
         \end{itemize}
     % 自变量：这是你要改变的实验部分，以便你希望观察到性能的可测量的改变。  请注意，我们曾经只想要一个自变量--有时我们以此为目标，但承认其他部分会发生变化，我们需要对我们的系统和/或结果进行仔细分析。
     \item \textbf{Independent Variable}: 
         \begin{itemize}
-            \item PID update frequency \bm{$f$}: We change the frequency across the whole range as previously described. 
+            \item PID update frequency \bm{$f$}: We change the frequency across the whole range as previously described in Algorithm \ref{TestMethod} and \ref{PIDTuningMethod}. 
             \item PID parameter \bm{$K_{i}$} and \bm{$K_{d}$}: For each neighborhood we use a unique set of PID parameters, to keep PID stable at different frequencies. Since we are looking at the effect of frequency shift on performance in the same neighbourhood, these variable have no affect on the experimental results. 
         \end{itemize}
     % 因变量：这些是你的实验的一部分，你希望在其中观察到一个可测量的变化。  你将设计或选择适当的参数来测量和分析这个可依赖的变量。  例如，我们可以有一个系统的因变量，但使用平均值、模式和中位数的指标来分析它。
     \item \textbf{Dependent Variable(s)}:  all metrics are \textbf{measured and calculated automatically by experiment program}.
         \begin{itemize}
             \item Overshoot(\%): The amount that the process variable overshoots the final value, expressed as a percentage of the final value.
-            \item Setting time(ms): If process variable shows three consecutive points are within $\pm5\%$ error of the final value, the system is considered stable and the setting time is recorded.
+            \item Setting time(ms): If process variable shows three consecutive points are within $\pm5\%$ error of the final value, the system is considered stable and the setting time is recorded. And if process variable failed to meet this requirement within 1 second, we consider the system oscillates. Please note that the setting time we use is \textit{customized} for programming.
             % 如果有连续三个点在给定值±5%范围内，则判定系统稳定，记录稳定时间
         \end{itemize}
 \end{itemize}
@@ -248,7 +249,7 @@ Variables in this experiment are: \bm{$K_{p}$}, \bm{$K_{i}$}, \bm{$K_{d}$}, PID 
 % 你应该讨论你的衡量标准的优点和缺点。  通常，我们需要一个以上的指标来弥补另一个指标中被混淆或隐藏的信息。  通过使用一个以上的指标，我们可以更接近于你的实验结果的真相。  
 
 % 我们所使用的overshoot和setting time是经典的PID性能指标。我们放弃rise time和steady-state error是因为(1)我们观察到很多时候PID控制器第一次update就会产生overshoot，没有rise的过程。（2）在本实验中steady-state error有一点被customized setting time 覆盖了。且steady-state error往往很小，观测意义不大
-The overshoot and setting time that we use are classical PID performance metrics. We do not use rise time and steady-state error because \textbf{(1)} We observe that many times the PID controller produces overshoot on the first update and there is no rise process. \textbf{(2)} In this experiment the steady-state error is partially covered by the customised setting time. And the steady-state error is often so small that the observation is not of much significance. Also note that the setting time we use is customized for programming.
+The overshoot and setting time that we use are classical PID performance metrics. We do not use rise time and steady-state error because \textbf{(1)} We observe that many times the PID controller produces overshoot on the first update and there is no rise process. \textbf{(2)} In this experiment the steady-state error is partially covered by the customised setting time. And the steady-state error is often so small that the observation is not of much significance.
 
 For a discrete controller, it may be unfair to use setting times (ms) to evaluate system performance at all frequencies, as lower frequencies naturally have longer setting times. 
 
@@ -276,7 +277,7 @@ For a discrete controller, it may be unfair to use setting times (ms) to evaluat
 \label{fig_appendix}
 \end{figure*}
 % 实验的总体结果详见附录中的的图（引用）。根据PID控制器性能的变化，我们将完整的频率范围分为三个频段：低频（0，40），中频（40，230），高频（230，500）。接下来展示PID控制器的性能在这三个频段中发生的变化。
-The overall results of the experiment are detailed in the figure in the appendix (Fig. \ref{fig_appendix}.). \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$}, and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
+The overall results of the experiment are detailed in in Fig. \ref{fig_appendix}. \textbf{The complete frequency range was divided into three bands according to the variation in the performance of the PID controller: low frequency \bm{$f=[0,40]$}, medium frequency \bm{$f=[40,230]$}, and high frequency \bm{$f=[230,500]$}}. The next subsection shows how the performance of the PID controller changes over these three frequency bands.
 \subsection{Result Details (Fig. \ref{fig_appendix}.) } 
 \label{Result Details}
     \textbf{Graph explanation:} Each line in the graph represents a neighbourhood with its corresponding PID parameter set to show the PID performance at different frequencies. The red dot at the bottom represents where the process value oscillates and fails to reach steady-state. Labels show the center frequencies of each neighbourhood.
@@ -284,7 +285,7 @@ The overall results of the experiment are detailed in the figure in the appendix
 \begin{itemize}
     \item \textbf{Low Frequency(\bm{$f=[0,40]$}):}
         %超调和调节时间最大。其中，调节时间明显比其他频段更长。随着频率上升，系统的调节时间和超调展现出逐渐减小的趋势。图右侧的四个红点是2邻域最右侧点发生震荡，左侧的两个红点是37.57邻域的最左侧两个点发生震荡。 
-        \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the range are the rightmost points of the $f=2$ neighbourhood where oscillation occurs, and the red dot on the left side are the leftmost points of the $f=37.57$ neighbourhood where oscillation occurs. 
+        \\Overshoot and setting times are the largest. \textbf{The setting time is significantly longer than in the other frequency bands. As the frequency increases, the setting time and overshoot of the system show a decreasing trend.} The four red dots on the right side of the range are the rightmost points of the $f=2Hz$ neighbourhood where oscillation occurs, and the red dot on the left side are the leftmost points of the $f=37.57Hz$ neighbourhood where oscillation occurs. Setting time of $f=2Hz$ was cropped off in the figure —— they are around 2600$\sim$4600 ms, increases as the frequency increases, and cannot fit in this figure.
     \item \textbf{Medium Frequency(\bm{$f=[40,230]$}):} 
         %PID控制器在此频段中性能最好。有最低的超调和调节时间。性能仍然随频率上升而改善。注意，随着频率上升，开始出现一些离散的易震荡频段，在这些频段中PID控制器突然变得非常容易震荡。这样的易震荡频段随频率上升而增多。图中所有的离群点都是位于震荡频段边缘的点。
         \\The PID controller has the best performance in this frequency band. There is the lowest overshoot and setting time. Performance still improves with increasing frequency. Note that as frequency rises, some discrete oscillation-prone bands begin to appear where the PID controller suddenly becomes very oscillatory. Such oscillation-prone bands increase with increasing frequency. \textbf{All the outliers in the graph are points at the edges of the oscillatory bands.}
@@ -304,14 +305,14 @@ The overall results of the experiment are detailed in the figure in the appendix
      \begin{figure}
             \centering
             \includegraphics[width=\linewidth]{Report/Pic/OscillateExample.png}
-            \caption{Examples of different oscillate scenario. Red line marked at set point value (1.0), and for 2), dotted line marked the 5\% error range. These figures are for example only, not real data.}
+            \caption{Examples of different oscillate scenario. Red line marked at set point value (1.0), and for 2): dotted line marked the 5\% error range. These figures are for example only, not real data.}
             \label{OscillateExample}
         \end{figure}
         % 高频段的震荡和低频段的震荡是不同的。根据我们的定义：如果没能在一秒内保持连续三次稳定在If process variable failed to show three consecutive points are within $\pm5\%$ error of the final value in 1 second period, the system is considered oscillate. 但有两种情形符合这一定义：1）被控量在给定值上下大幅度震荡（一般意义上的震荡） 2）稳态性能太差，稳态误差无法维持在±5%的范围内，被判定为震荡。在我们的实验中，低频段的震荡属于前者，而高频段的震荡属于后者。即，低频时控制器使系统被控量上下大幅度震荡，高频时系统给定值的附近持续小幅度震荡，且此种震荡不能保持在±5%误差范围内。
         \textbf{Oscillations in the high frequency band are different from oscillations in the low frequency band.} According to our definition: if the process variable fails to show three consecutive points are within $\pm5\%$ error of the set point in 1 second period, the system is considered oscillate. However, there are two cases that fit this definition:
         \begin{enumerate}
-            \item The process variable oscillates significantly above and below the given value (oscillation in the general sense).
-            \item The steady state performance is so poor that the steady state error cannot be maintained within $\pm5\%$ and is judged to be oscillate.
+            \item The process variable oscillates significantly above and below the given value (oscillation in the general sense). (Fig. \ref{OscillateExample}.1)
+            \item The steady state performance is so poor that the steady state error cannot be maintained within $\pm5\%$ and is judged to be oscillate. (Fig. \ref{OscillateExample}.2)
         \end{enumerate}
        In our experiments, oscillations in the low frequency band fall into the former category, while oscillations in the high frequency band fall into the latter category. That is, at low frequencies the controller causes the system to oscillate up and down significantly, and at high frequencies the system oscillates continuously in small ranges around  set point, and this oscillation cannot be maintained within $\pm5\%$ error.
     \item \textbf{Trends in PID Parameters: Fig. \ref{KiTrend}}\\
@@ -330,12 +331,12 @@ The overall results of the experiment are detailed in the figure in the appendix
             \caption{PID parameters trend. \textbf{Red line marked at \bm{$f=322.1Hz$}}, which is the 10th of 15 equidistant points in the frequency range 2$\sim$500Hz, and we found this trend when adjusting the PID parameters.}
             \label{KiTrend}
         \end{figure}
-    \item \textbf{Kinematics in High Frequency:} Algorithm \ref{KinematicsAlgorithm} in \ref{Implementation}\\
+    \item \textbf{Kinematics in High Frequency:} Algorithm \ref{KinematicsAlgorithm} in \ref{Implementation}.\\
     % 在高频区域，运动学计算也引入了不稳定因素。如果kinematics的更新频率高于轮轴encoder的变化频率，encoder在两次update之间的变化将被计算为0，使kinematics错误地将速度计算为0，这一问题会使f>500的区域大幅震荡，但此问题可以通过软件方法解决（如，在每次encoder count变化时更新Kinematics，而不是固定频率更新。）
-    In the high frequency range, the kinematics calculation also introduces instability. If the kinematics are updated more frequently than the axle encoder changes, the encoder count does not have time to change between two kinematics updates, causing the kinematics to incorrectly calculate the velocity as 0. This problem can cause significant oscillations in the $f>500$ range, but this problem can be solved by software methods (e.g. by updating the kinematics when encoder count changes, rather than updating kinematics at a fixed frequency.)
+    In the high frequency range, the kinematics calculation also introduces instability. If the kinematics are updated more frequently than the shaft wheel encoder changes, the encoder count does not have time to change between two kinematics updates, causing the kinematics to incorrectly calculate the velocity as 0. This problem can cause significant oscillations in the $f>500Hz$ range, but this problem can be solved by software methods (e.g. by updating the kinematics when encoder count changes, rather than updating kinematics at the same frequency of PID controller.)
     \item \textbf{Oscillate bands:}\\
     % 随着频率增长，出现了越来越多越来越长的震荡区间，在这些范围内PID控制器的性能突然变差。距离震荡区间越近，超调和调节时间越大。且震荡区间对多组PID参数均有相同影响。
-    As the frequency increases, more and more oscillation intervals of increasing length appear and the performance of the PID controller suddenly deteriorates within these ranges. The closer to the oscillation interval, the greater the overshoot and setting time. The oscillation interval has the same effect on multiple sets of PID parameters.
+    As the frequency increases, more and more oscillation bands of increasing length appear and the performance of the PID controller suddenly deteriorates within these ranges. The closer to the oscillation band, the greater the overshoot and setting time. The oscillation interval has the same effect on multiple sets of PID parameters. The effect of oscillate bands can be observed from Fig. \ref{fig_appendix},there are many outlier points at the edge of oscillate bands —— they are survivors from the oscillate bands.
 \end{itemize}
 \subsection{Summary}
 % 随着更新频率的提升，PID控制器的性能先提升后下降，这一规律也出现在使用同一组PID参数的单一邻域中。随着频率的升高，出现了若干不连续的震荡频段，频率越高震荡频段越多越长。
@@ -355,12 +356,9 @@ Based on our understanding to PID controllers, we hypothesised that:
 %过高的频率使PID控制器控制量的变化不能及时地反映在被控对象上，而降低性能
 %过低的频率导致低速的响应，降低控制实时性，从而降低性能
 %在频率域中，应该有一个最优频段，可以较好地平衡PID的各个方面，达到较优的性能
-\begin{enumerate}
-    \item High update frequency makes the PID controller changes can not be reflected in time on the controlled object, and reduce the performance.
-    \item Low update frequency leads to a slow response speed, which affect real-time controlling and therefore controller performance.
-    \item In the frequency range, there could be an optimal frequency band that can better balance all aspects of the PID to achieve better performance.
-\end{enumerate}
-
+\begin{quote}
+    \textit{In the frequency range, there could be an optimal frequency band that can better balance all aspects of the PID to achieve better performance.}
+\end{quote}
 % 为了验证我们的想法，我们将PID控制器应用于Pololu 3pi+ 32U4 robot, 将机器人的左轮空转速度作为被控对象。根据实际应用的限制与硬件本身的限制，选取了一个频率范围，在这个频率范围内等间距选取15个点，对这些点调试了PID参数，并在这些点的基础上shift频率来观察PID控制器性能的变化。
 For the experiment implementation, we applied the PID controller to the Pololu 3pi+ 32U4 robot, using the robot's left wheel idle speed as the controlled object. A frequency range was selected based on the limitations of the application and the hardware itself. 15 points were selected at equal intervals within this frequency range, the PID parameters were tuned for these points, and we shift PID update frequency based on these points to observe the change in performance of the PID controller. We use overshoot and setting time as metrics to evaluate PID performance.
 % 下面两行是示例：
@@ -375,7 +373,7 @@ For the experiment implementation, we applied the PID controller to the Pololu 3
 From our results, we discovered:
 \begin{itemize}
     \item \textbf{For low frequency (\bm{$f=[0,40]$}):} The process value shows violent oscillation and the PID controller has the worst performance. PID performance improves with increasing update frequency. 
-    \item \textbf{For medium frequency (\bm{$f=[40,230]$}):} The PID controller performs best, with performance improving as the frequency rises, but gradually some oscillation bands emerge in which the PID controller performance suddenly deteriorates and oscillates.
+    \item \textbf{For medium frequency (\bm{$f=[40,230]$}):} The PID controller performs best, with performance improving as the frequency rises, but gradually some oscillation bands appear, in which the PID controller performance suddenly deteriorates and oscillates.
     \item \textbf{For high frequency (\bm{$f=[230,500]$}):} In this range, the performance of the PID controller decreases as the frequency rises. PID performance is better than in the low frequency range but worse than in the medium frequency range.
 \end{itemize}
 
@@ -395,7 +393,7 @@ Our work also has \textbf{limitations}:
 \textbf{Future work:}
 \begin{itemize}
     \item Use other objectives to run the PID controlling test, e.g. heading angle of the robot. To make the research more application relevant.
-    \item Find the precise criteria to tune the PID parameters.
+    \item Find a non-artificial way to tune the PID parameters.
     \item Extend the experiment to a wider frequency range and take more points within the existing frequency range.
     \item Compare optimal update frequency controller performance with performance at other frequencies.
 \end{itemize}
