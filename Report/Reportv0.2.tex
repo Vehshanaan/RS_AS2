@@ -128,7 +128,7 @@ System has \textbf{4 main components: PID controller, wheel and motor driver, en
     % 也就意味着速度计算有一些误差（难以测得一圈的编码数），但速度误差对本文中的实验没有影响。
     \item\textbf{Encoder: }Each wheel shaft has an encoder that can be used to measure the movement of the wheel. Encoder counts between 358$\sim$359 for a 360° wheel spin. In this paper we use encoder count per millisecond as unit of wheel speed to avoid errors in speed calculation with metric units (e.g. meter), because the encoder count is unknown for a full spin.
     % 用编码器值的变化与轮子的周长计算轮子的运动，藉此计算机器人kinematics。在本文中只需计算运动学中的轮子速度部分。
-    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the wheel shaft encoder value. In this paper only the wheel speed part of the kinematics is needed. See Algorithm \ref{KinematicsAlgorithm} for details of kinematics implementation.
+    \item\textbf{Kinematics: }The motion of the wheel is calculated using the variation of the wheel shaft encoder value. In this paper only the wheel speed part of the kinematics is needed. See Algorithm \ref{KinematicsAlgorithm} for details of kinematics implementation. \textbf{We update the kinematics at the same update frequency of PID controller.}
 \end{itemize}
 
 \begin{algorithm}
@@ -333,7 +333,7 @@ The overall results of the experiment are detailed in in Fig. \ref{fig_appendix}
         \end{figure}
     \item \textbf{Kinematics in High Frequency:} Algorithm \ref{KinematicsAlgorithm} in \ref{Implementation}.\\
     % 在高频区域，运动学计算也引入了不稳定因素。如果kinematics的更新频率高于轮轴encoder的变化频率，encoder在两次update之间的变化将被计算为0，使kinematics错误地将速度计算为0，这一问题会使f>500的区域大幅震荡，但此问题可以通过软件方法解决（如，在每次encoder count变化时更新Kinematics，而不是固定频率更新。）
-    In the high frequency range, the kinematics calculation also introduces instability. If the kinematics are updated more frequently than the shaft wheel encoder changes, the encoder count does not have time to change between two kinematics updates, causing the kinematics to incorrectly calculate the velocity as 0. This problem can cause significant oscillations in the $f>500Hz$ range, but this problem can be solved by software methods (e.g. by updating the kinematics when encoder count changes, rather than updating kinematics at the same frequency of PID controller.)
+    In the high frequency range, the kinematics calculation also introduces instability (we use the same update frequency for both PID controller and kinematics calculation). If the kinematics are updated more frequently than the shaft wheel encoder changes, the encoder count does not have time to change between two kinematics updates, causing the kinematics to incorrectly calculate the velocity as 0. This problem can cause significant oscillations in the $f>500Hz$ range, but this problem can be solved by software methods (e.g. by updating the kinematics when encoder count changes, rather than updating kinematics at the same frequency of PID controller.)
     \item \textbf{Oscillate bands:}\\
     % 随着频率增长，出现了越来越多越来越长的震荡区间，在这些范围内PID控制器的性能突然变差。距离震荡区间越近，超调和调节时间越大。且震荡区间对多组PID参数均有相同影响。
     As the frequency increases, more and more oscillation bands of increasing length appear and the performance of the PID controller suddenly deteriorates within these ranges. The closer to the oscillation band, the greater the overshoot and setting time. The oscillation interval has the same effect on multiple sets of PID parameters. The effect of oscillate bands can be observed from Fig. \ref{fig_appendix},there are many outlier points at the edge of oscillate bands —— they are survivors from the oscillate bands.
