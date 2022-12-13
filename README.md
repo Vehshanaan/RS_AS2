@@ -11,4 +11,7 @@
 # RS_AS2
 布里斯托大学 MSc Robotics： Robotic System课程 Assessment2 的工作目录
 
+This is a repository for learning process storage, so there there's a lot of mess stuff here.
+[Codes used for final experiment](https://github.com/Vehshanaan/RS_AS2/tree/main/Experiments/Week9Experiments/AutoTest)
+
 关于最新的进展，请参看“[待办事项与每周进度](https://github.com/Vehshanaan/RS_AS2/tree/main/%E5%BE%85%E5%8A%9E%E4%BA%8B%E9%A1%B9%E4%B8%8E%E6%AF%8F%E5%91%A8%E8%BF%9B%E5%BA%A6)”文件夹
